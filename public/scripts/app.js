@@ -14,7 +14,7 @@ const request = (options, cb) => {
 
 // Creates the DOM tree dynamically as the tweets are posted.
 const displayCart = function(foods) {
-  const $article = $("<article>")//.attr.id;
+  const $article = $("<article>");
   const $header = $("<header>");
   const $avatar = $("<img>")
     .addClass("avatar")

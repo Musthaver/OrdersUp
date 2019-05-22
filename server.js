@@ -51,7 +51,7 @@ const fakeTable = {
   2: {
     img: 'https://www.placecage.com/g/200/300',
     name: 'Nicolas Cage!',
-    description: 'best actor in the goddamn planet'
+    description: 'best actor on the goddamn planet'
   },
   3: {
     img: 'https://www.placecage.com/c/200/300',
