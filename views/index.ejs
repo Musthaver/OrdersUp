@@ -35,19 +35,17 @@
     </nav>
   <body>
       <main>
-      <% for (const food in results) { %>
-    <div class="card" style="width: 18rem;" onclick="alert('<%= results[food].name %>')">
-      <img class="card-img-top" alt="Food image" src='<%= results[food].image%>'>
-      <div class="card-body"></div>
-        <div> <%= results[food].name%></div>
-        <p class="card-text">
-            <%= results[food].description%>
-        </p>
-      </div>
-    </div>
-    <% }; %>
-    <aside id="cart"> <button class="compose">Checkout</button></aside> 
+        <% for (const food in results) { %>
+        <div class="<%= results[food].id%>" style="width: 18rem;" onclick="alert('<%= results[food].name %>')">
+          <img class="card-img-top" alt="Food image" src='<%= results[food].image%>'>
+          <div class="card-body">
+          <span><h4> <%= results[food].name%></h4><h5><%= results[food].price%></h5></span>
+          <p class="card-text"><%= results[food].description%></p>
+          </div>
+        </div>
+        <% }; %>
     </main>
+    <aside id="cart"> <button class="compose">Checkout</button></aside> 
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

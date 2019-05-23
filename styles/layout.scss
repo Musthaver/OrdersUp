@@ -1,8 +1,19 @@
 body {
-  background-color: #EEE;
-
-  h1 {
-    color: #244751;
-  }
+  background-color: #EEE
+  
 }
+
+  main {
+    padding-top: 90px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    div .card {
+      padding: 20px 10px;
+     
+      span {
+
+      }
+    }
+  }
 
