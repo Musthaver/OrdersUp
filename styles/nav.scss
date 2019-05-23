@@ -1,28 +1,27 @@
 #nav-bar {
+  display: flex;
   padding: 0px 2em;
   position: fixed;
   top: 0;
   height: 80px;
   width: 100%;
   background-color: #573d7c;
-  color: #e8fdff;
+  color: #ffffff;
   z-index: 10;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
 }
 
 #nav-bar .logo {
-  width: 80px;
-  height: 80px;
-  float: left;
+  width: 60px;
+  height: 60px;
 }
 
 #nav-bar .header {
   padding-left: 10px;
   font-size: 2em;
   line-height: 2.5em;
-  float: left;
 }
   
   
