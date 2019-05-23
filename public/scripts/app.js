@@ -16,19 +16,19 @@ const fakeTable = {
     img: 'https://www.placecage.com/200/300',
     name: 'Nicolas Cage?',
     description: 'best actor in the goddamn world',
-    price: 999.999 + '$'
+    price: 999999 
   },
   2: {
     img: 'https://www.placecage.com/g/200/300',
     name: 'Nicolas Cage!',
     description: 'best actor on the goddamn planet',
-    price: 3 + '$'
+    price: 3 
   },
   3: {
     img: 'https://www.placecage.com/c/200/300',
     name: 'Nicolas Cage!!!!!',
     description: 'best actor in the goddamn UNIVERSE',
-    price: 1000000000000000000000 + '$'
+    price: 1000 
   }
 };
 
@@ -36,8 +36,16 @@ const fakeTable2 = {
   img: 'https://www.placecage.com/200/300',
   name: 'Nicolas Cage?',
   description: 'best actor in the goddamn world',
-  price: 999.999
+  price: 999999
 };
+
+const calculateTotal = (fakeTable) => {
+  const cartArray = []
+  for (const keyID in fakeTable){
+    cartArray.push(fakeTable[keyID].price)
+  }
+  return cartArray.reduce((a,b) => a + b)
+}
 
 const displayCart = function(food) {
   const $article = $('<article>');
@@ -47,12 +55,15 @@ const displayCart = function(food) {
   const $price = $('<div>')
     .addClass('price')
     .text(food.price);
-  const $delete = $('<button>').addClass('deleteButton');
-  const $total = $('<div>').addClass('total')
+  const $delete = $('<i>').addClass('fas fa-times-circle')
+  .on("click", function() { 
+    alert('Deleted')})
+  
 
   $article.append($foodName);
   $article.append($price);
   $article.append($delete);
+
   return $article;
 };
 // //"Refreshes" the page after adding a single tweet
@@ -70,6 +81,7 @@ const displayCart = function(food) {
 
 $(function() {
   renderFoods(fakeTable);
+  $('#cart').append($('<div>').addClass('total').text(calculateTotal(fakeTable)))
 });
 
 const renderFoods = fakeTable => {
