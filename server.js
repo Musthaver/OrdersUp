@@ -9,7 +9,6 @@ const bodyParser = require('body-parser');
 const sass = require('node-sass-middleware');
 const app = express();
 const path = require('path');
-
 const knexConfig = require('./knexfile');
 const knex = require('knex')(knexConfig[ENV]);
 const morgan = require('morgan');
@@ -44,36 +43,23 @@ app.use('/img',express.static(path.join(__dirname, 'public/img')));
 
 // Mount all resource routes
 app.use('/api/users', usersRoutes(knex));
-
-
-const fakeTable = {
-  1: {
-    img: 'https://www.placecage.com/200/300',
-    name: 'Nicolas Cage?',
-    description: 'best actor in the goddamn world'
-  },
-  2: {
-    img: 'https://www.placecage.com/g/200/300',
-    name: 'Nicolas Cage!',
-    description: 'best actor on the goddamn planet'
-  },
-  3: {
-    img: 'https://www.placecage.com/c/200/300',
-    name: 'Nicolas Cage!!!!!',
-    description: 'best actor in the goddamn UNIVERSE'
-  }
-};
+app.use('/img', express.static(path.join(__dirname, 'public/img')));
 
 // Home page
 app.get('/', (req, res) => {
-  const templateVars = {
-    fakeTable: fakeTable
-  };
-  res.render('index', templateVars);
+  knex
+    .select('*')
+    .from('foods')
+    .then(results => {
+      // console.log(results);
+      // res.json(results)
+      res.render('index', { results: results });
+    });
+
+  // console.log(results)
+  //   // const templateVars = { foods: foods };
+  //   res.render('index', templateVars);
 });
-
-
-
 
 app.listen(PORT, () => {
   console.log('Example app listening on port ' + PORT);

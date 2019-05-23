@@ -35,13 +35,13 @@
     </nav>
   <body>
       <main>
-      <% for (const key in fakeTable) { %>
-    <div class="card" style="width: 18rem;" onclick="alert('<%= key %>')">
-      <img src=<%= fakeTable[key].img%> card-img-top">
+      <% for (const food in results) { %>
+    <div class="card" style="width: 18rem;" onclick="alert('<%= results[food].name %>')">
+      <img src=<%= results[food].image%> card-img-top">
       <div class="card-body"></div>
-        <div> <%= fakeTable[key].name%></div>
+        <div> <%= results[food].name%></div>
         <p class="card-text">
-            <%= fakeTable[key].description%>
+            <%= results[food].description%>
         </p>
       </div>
     </div>
