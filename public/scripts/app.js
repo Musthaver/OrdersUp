@@ -1,6 +1,6 @@
-const url = '/restaurant';
-const urlCart = '/restaurant/cart';
-const urlOrder = '/restaurant/order';
+const url = '/';
+const urlCart = '/cart';
+const urlOrder = '/order';
 
 const request = (options, cb) => {
   $.ajax(options)
@@ -16,36 +16,29 @@ const fakeTable = {
     img: 'https://www.placecage.com/200/300',
     name: 'Nicolas Cage?',
     description: 'best actor in the goddamn world',
-    price: 999999 
+    price: 999999
   },
   2: {
     img: 'https://www.placecage.com/g/200/300',
     name: 'Nicolas Cage!',
     description: 'best actor on the goddamn planet',
-    price: 3 
+    price: 3
   },
   3: {
     img: 'https://www.placecage.com/c/200/300',
     name: 'Nicolas Cage!!!!!',
     description: 'best actor in the goddamn UNIVERSE',
-    price: 1000 
+    price: 1000
   }
 };
 
-const fakeTable2 = {
-  img: 'https://www.placecage.com/200/300',
-  name: 'Nicolas Cage?',
-  description: 'best actor in the goddamn world',
-  price: 999999
-};
-
-const calculateTotal = (fakeTable) => {
-  const cartArray = []
-  for (const keyID in fakeTable){
-    cartArray.push(fakeTable[keyID].price)
+const calculateTotal = fakeTable => {
+  const cartArray = [];
+  for (const keyID in fakeTable) {
+    cartArray.push(fakeTable[keyID].price);
   }
-  return cartArray.reduce((a,b) => a + b)
-}
+  return cartArray.reduce((a, b) => a + b);
+};
 
 const displayCart = function(food) {
   const $article = $('<article>');
@@ -55,10 +48,11 @@ const displayCart = function(food) {
   const $price = $('<div>')
     .addClass('price')
     .text(food.price);
-  const $delete = $('<i>').addClass('fas fa-times-circle')
-  .on("click", function() { 
-    alert('Deleted')})
-  
+  const $delete = $('<i>')
+    .addClass('fas fa-times-circle')
+    .on('click', function() {
+      alert('Deleted');
+    });
 
   $article.append($foodName);
   $article.append($price);
@@ -79,9 +73,38 @@ const displayCart = function(food) {
 //   // });
 // };
 
+const addItemToCart = (food) => {
+  $('#cart')
+    .append('<div>')
+    .text(food.name);
+};
+
 $(function() {
   renderFoods(fakeTable);
-  $('#cart').append($('<div>').addClass('total').text(calculateTotal(fakeTable)))
+  $('#cart').append(
+    $('<div>')
+      .addClass('total')
+      .text(calculateTotal(fakeTable))
+  );
+
+  $('div .card').on('click', function(event) {
+    event.preventDefault();
+    $.ajax({
+      method: 'POST',
+      url: '/cart',
+      data: '/api/users'
+    })
+      .done(foods => {
+        for (food of foods) {
+        addItemToCart(food)}
+      })
+      .fail(error => {
+        console.log(`Error: ${error}`);
+      })
+      .always(() => {
+        console.log('Request completed');
+      });
+  });
 });
 
 const renderFoods = fakeTable => {
@@ -174,7 +197,6 @@ const renderFoods = fakeTable => {
 //   //Adds the initial tweets to the page
 //   loadTweets();
 // });
-
 
 // $(() => {
 //   $.ajax({
