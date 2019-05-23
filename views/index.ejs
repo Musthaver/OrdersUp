@@ -37,7 +37,7 @@
       <main>
       <% for (const food in results) { %>
     <div class="card" style="width: 18rem;" onclick="alert('<%= results[food].name %>')">
-      <img src=<%= results[food].image%> card-img-top">
+      <img class="card-img-top" alt="Food image" src='<%= results[food].image%>'>
       <div class="card-body"></div>
         <div> <%= results[food].name%></div>
         <p class="card-text">
