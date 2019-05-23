@@ -8,7 +8,7 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex('foods').insert([
-        {name: 'Clam Chowder', description: '', price: '4.75', image: '../../public/img/102900.jpg', category_id: '1'},
+        {name: 'Clam Chowder', description: '', price: '4.75', image: '/img/102900.jpg', category_id: '1'},
         {name: 'Poutine', description: 'Vegetarian sauce', price: '8.50', image: '../../public/img/102912.jpg', category_id: '1'},
         {name: 'Homemade Fries', description: '', price: '3.95', image: '../../public/img/102918.jpg', category_id: '1'},
         {name: 'Green Salad', description: '', price: '5.50', image: '../../public/img/102922.jpg', category_id: '2'},

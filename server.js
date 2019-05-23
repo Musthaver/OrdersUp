@@ -8,6 +8,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const sass = require('node-sass-middleware');
 const app = express();
+const path = require('path');
 
 const knexConfig = require('./knexfile');
 const knex = require('knex')(knexConfig[ENV]);
@@ -37,6 +38,9 @@ app.use(
   })
 );
 app.use(express.static('public'));
+// app.use("/public", express.static(__dirname + '/public'));
+app.use('/img',express.static(path.join(__dirname, 'public/img')));
+
 
 // Mount all resource routes
 app.use('/api/users', usersRoutes(knex));
