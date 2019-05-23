@@ -48,13 +48,25 @@ app.use('/img', express.static(path.join(__dirname, 'public/img')));
 // Home page
 app.get('/', (req, res) => {
   knex
-    .select('*')
+    .select(
+      'foods.id as id',
+      'foods.name',
+      'foods.price',
+      'foods.description',
+      'foods.image',
+      'categories.name as category',
+    )
     .from('foods')
+    .innerJoin('categories','foods.category_id','categories.id')
     .then(results => {
-      // console.log(results);
+      console.log(results);
       // res.json(results)
-      res.render('index', { results: results });
-    });
+      res.render('index', { results: results })
+      })
+    .catch(function (err) {
+      console.log(err)
+      })
+    .finally(()=> knex.destroy());
 
   // console.log(results)
   //   // const templateVars = { foods: foods };

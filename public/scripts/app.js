@@ -109,8 +109,6 @@ $(function() {
 
 const renderFoods = fakeTable => {
   $.each(fakeTable, (index, keyID) => {
-    console.log("index", index);
-    console.log("KeyID", keyID);
     $('#cart').append(displayCart(keyID));
   });
 };
