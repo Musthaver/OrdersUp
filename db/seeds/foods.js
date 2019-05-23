@@ -13,7 +13,7 @@ exports.seed = function(knex, Promise) {
         {name: 'Homemade Fries', description: '', price: '3.95', image: 'img/102918.jpg', category_id: '1'},
         {name: 'Green Salad', description: '', price: '5.50', image: 'img/102922.jpg', category_id: '2'},
         {name: 'House Salad', description: 'Served with lemon, coleslaw and choice of homemade sauce', price: '15.95', image: 'img/102923.jpg', category_id: '2'},
-        {name: 'Shrimp Salad', description: 'Matane shrimp with dill, celery and shallot mayonnaise served over a green salad with tomato vinaigrette with olive oil and lemon', price: '12.95', image: 'img/102992.jpg', category_id: '2'},
+        {name: 'Shrimp Salad', description: 'Matane shrimp with dill, celery and shallot mayonnaise served over a green salad with tomato vinaigrette with olive oil and lemon', price: '12.95', image: 'img/104492.jpg', category_id: '2'},
         {name: 'Coleslaw', description: '', price: '4.50', image: 'img/102921.jpg', category_id: '2'},
         {name: 'Fried Calamari', description: 'Served with lemon and your choice of sauce', price: '6.95', image: 'img/102917.jpg', category_id: '3'},
         {name: 'Fish - 2 pieces', description: '2 cod pieces served with lemon, coleslaw and your choice of sauce', price: '10.95', image: 'img/102951.jpg', category_id: '3'},

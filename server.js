@@ -38,12 +38,10 @@ app.use(
 );
 app.use(express.static('public'));
 // app.use("/public", express.static(__dirname + '/public'));
-app.use('/img',express.static(path.join(__dirname, 'public/img')));
-
 
 // Mount all resource routes
 app.use('/api/users', usersRoutes(knex));
-app.use('/img', express.static(path.join(__dirname, 'public/img')));
+// app.use('/img', express.static(path.join(__dirname, 'public/img')));
 
 // Home page
 app.get('/', (req, res) => {

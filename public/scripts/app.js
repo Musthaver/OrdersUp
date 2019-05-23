@@ -32,13 +32,6 @@ const fakeTable = {
   }
 };
 
-const fakeTable2 = {
-  img: 'https://www.placecage.com/200/300',
-  name: 'Nicolas Cage?',
-  description: 'best actor in the goddamn world',
-  price: 999999
-};
-
 const calculateTotal = (fakeTable) => {
   const cartArray = []
   for (const keyID in fakeTable){
