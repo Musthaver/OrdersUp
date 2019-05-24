@@ -105,12 +105,14 @@ $(function() {
   $('main article').on('click', function(event) {
     event.preventDefault();
     const foodID = $(this).attr('class');
+    console.log('food ID', foodID);
     $.ajax({
       method: 'POST',
       url: '/cart',
       data: foodID
     })
       .done(response => {
+        console.log("response from knex", response);
         addItemToStorage(foodID);
         let items = {...localStorage};
         $('#cartitems').empty();
@@ -121,7 +123,7 @@ $(function() {
         console.log(`Error: ${error}`);
       })
       .always(() => {
-        console.log('Request completed');
+        console.log('Post to cart Request completed');
       });
   });
 
