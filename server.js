@@ -12,9 +12,37 @@ const knexConfig = require('./knexfile');
 const knex = require('knex')(knexConfig[ENV]);
 const morgan = require('morgan');
 const knexLogger = require('knex-logger');
+const client = require('twilio')(process.env.TWILIOACCOUNT, process.env.TWILIOTOKEN);
 
 // Seperated Routes for each Resource
 const usersRoutes = require('./routes/users');
+
+
+//TWilio
+const http = require('http');
+const MessagingResponse = require('twilio').twiml.MessagingResponse;
+
+app.post('/sms', (req, res) => {
+  const twiml = new MessagingResponse();
+
+  twiml.message('The Robots are coming! Head for the hills!');
+
+  res.writeHead(200, {'Content-Type': 'text/xml'});
+  res.end(twiml.toString());
+});
+
+http.createServer(app).listen(1337, () => {
+  console.log('Express server listening on port 1337');
+});
+
+
+// client.messages
+//   .create({
+//      body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
+//      from: '+14387963966',
+//      to: '+15148059285'
+//    })
+//   .then(message => console.log(message.sid));
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.
