@@ -12,27 +12,6 @@ const request = (options, cb) => {
 };
 
 
-
-
-let fakeTable = {
-  1: {
-    name: 'Nicolas Cage?',
-    price: 999999
-  },
-  2: {
-    name: 'Nicolas Cage!',
-    price: 3
-  },
-  3: {
-    name: 'Nicolas Cage!!!!!',
-    price: 1000
-  },
-  4: {
-    name: 'food1',
-    price: 'one milion $'
-  }
-};
-
 const calculateTotal = items => {
   const cartArray = [];
   for (const keyID in items) {
