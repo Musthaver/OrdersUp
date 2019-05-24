@@ -1,8 +1,18 @@
 #cart {
-    background-color: red;
+    background-color: white;
+    div#cartitems {
+        article{
+            fa-times-circle {
+                size: 1000px
+        }
+    }
+    div#total {
 
-    fa-times-circle {
-        size: 1000px
+    }
+    form {
+        bottom: 10px;
+    }
+
     }
 }
 

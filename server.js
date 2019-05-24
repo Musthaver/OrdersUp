@@ -86,6 +86,7 @@ app.get('/', (req, res) => {
     .leftOuterJoin('foods', 'foods.category_id', 'categories.id')
     .orderBy('categories.id')
     .then(results => {
+      console.log(results);
       const arrayOfCategories = [];
       for (const obj of results) {
         if (arrayOfCategories.includes(obj.category) === false) {
@@ -97,24 +98,21 @@ app.get('/', (req, res) => {
     .catch(function(err) {
       console.log(err);
     })
-    .finally(() => knex.destroy());
 });
 
 app.post('/cart', (req, res) => {
   const foodID = Object.keys(req.body)[0];
   knex
-    .select('foods.name as name', 'foods.price')
+    .select()
     .from('foods')
-    // .where('foods.id', foodID)
+    .where('foods.id', foodID)
     .then(results => {
-      console.log(results);
+      //result is an array with one object
       res.send(results);
     })
     .catch(function(err) {
       console.log(err);
     })
-    .finally(() => knex.destroy());
-  res.end();
 });
 
 app.delete('/cart', (req, res) => {

@@ -88,6 +88,7 @@ $(function() {
       data: foodID
     })
       .done(response => {
+        console.log(response);
         addItemToStorage(foodID);
         let items = { ...localStorage };
         $('#cartitems').empty();
