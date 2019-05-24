@@ -39,7 +39,6 @@ app.use(express.static('public'));
 // app.use("/public", express.static(__dirname + '/public'));
 // app.use('/img',express.static(path.join(__dirname, 'public/img')));
 
-
 // Mount all resource routes
 app.use('/api/users', usersRoutes(knex));
 // app.use('/img', express.static(path.join(__dirname, 'public/img')));
@@ -53,9 +52,10 @@ app.get('/', (req, res) => {
       'foods.name as name',
       'foods.price',
       'foods.description',
-      'foods.image')
+      'foods.image'
+    )
     .from('categories')
-    .leftOuterJoin('foods','foods.category_id','categories.id')
+    .leftOuterJoin('foods', 'foods.category_id', 'categories.id')
     .orderBy('categories.id')
     .then(results => {
       const arrayOfCategories = [];
@@ -64,36 +64,37 @@ app.get('/', (req, res) => {
           arrayOfCategories.push(obj.category);
         }
       }
-      res.render('index', {results, categories: arrayOfCategories})
+      res.render('index', { results, categories: arrayOfCategories });
     })
-    .catch(function (err) {
-      console.log(err)
+    .catch(function(err) {
+      console.log(err);
     })
-    .finally(()=> knex.destroy());
+    .finally(() => knex.destroy());
 });
 
 app.post('/cart', (req, res) => {
-  // let foodID = req.body.id; //.data?
-  // knex
-  // .select()
-  // .from('foods')
-  // .where('foods.id', foodID)
-  // .orderBy('categories.id')
-  // .then(results => {
-  //   res.send(results)
-  // })
-  // .catch(function (err) {
-  //   console.log(err)
-  // })
-  // .finally(()=> knex.destroy());
+  const foodID = Object.keys(req.body)[0];
+  knex
+    .select('foods.name as name', 'foods.price')
+    .from('foods')
+    // .where('foods.id', foodID)
+    .then(results => {
+      console.log(results);
+      res.send(results);
+    })
+    .catch(function(err) {
+      console.log(err);
+    })
+    .finally(() => knex.destroy());
   res.end();
 });
 
 app.delete('/cart', (req, res) => {
-  res.end()
+  res.end();
 });
 
 app.post('/order', (req, res) => {
+  console.log(req.body)
   res.end()
 });
 

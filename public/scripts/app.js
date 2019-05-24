@@ -11,28 +11,6 @@ const request = (options, cb) => {
     .always(() => console.log('Request completed.'));
 };
 
-
-
-
-let fakeTable = {
-  1: {
-    name: 'Nicolas Cage?',
-    price: 999999
-  },
-  2: {
-    name: 'Nicolas Cage!',
-    price: 3
-  },
-  3: {
-    name: 'Nicolas Cage!!!!!',
-    price: 1000
-  },
-  4: {
-    name: 'food1',
-    price: 'one milion $'
-  }
-};
-
 const calculateTotal = items => {
   const cartArray = [];
   for (const keyID in items) {
@@ -57,13 +35,13 @@ const displayCart = function(foodObj, items) {
         url: '/cart',
         method: 'DELETE'
       }).done(function() {
-        const clear = {...localStorage}
-        const clearReal = JSON.parse(clear.cart)
+        const clear = { ...localStorage };
+        const clearReal = JSON.parse(clear.cart);
         localStorage.removeItem(clearReal[foodObj]);
-        foodArray = []
+        foodArray = [];
         $('#cartitems').empty();
-        
-        renderFoods();
+        console.log(clearReal)
+        renderFoods(JSON.parse({...localStorage}.cart));
       });
     });
 
@@ -74,18 +52,17 @@ const displayCart = function(foodObj, items) {
   return $('#cartitems');
 };
 
-let foodArray = []
+let foodArray = [];
 const addItemToStorage = foodID => {
-  if(!localStorage.cart){
-    localStorage.setItem('cart', '')
+  if (!localStorage.cart) {
+    localStorage.setItem('cart', '');
   }
-  console.log(localStorage.cart)
   let foodObj = {
     name: foodID,
     price: foodID + 1
-  }
-  foodArray.push(foodObj)
-  localStorage.setItem('cart', JSON.stringify(foodArray))
+  };
+  foodArray.push(foodObj);
+  localStorage.setItem('cart', JSON.stringify(foodArray));
 };
 
 const renderFoods = itemsArray => {
@@ -96,11 +73,11 @@ const renderFoods = itemsArray => {
 
 $(function() {
   $(this).scrollTop(0);
-  $('#cart').append(
-    $('<div>')
-      .addClass('total')
-      .text(calculateTotal(fakeTable))
-  );
+  // $('#cart').append(
+  //   $('<div>')
+  //     .addClass('total')
+  //     .text(calculateTotal(fakeTable))
+  // );
 
   $('main article').on('click', function(event) {
     event.preventDefault();
@@ -112,9 +89,9 @@ $(function() {
     })
       .done(response => {
         addItemToStorage(foodID);
-        let items = {...localStorage};
+        let items = { ...localStorage };
         $('#cartitems').empty();
-        items = JSON.parse(items.cart)
+        items = JSON.parse(items.cart);
         renderFoods(items);
       })
       .fail(error => {
@@ -125,30 +102,34 @@ $(function() {
       });
   });
 
-$('.placeOrder').on('submit', function(event) {
-  event.preventDefault();
-  const $name = $(this).find("input[name='name']").val();
-  const $phone = $(this).find("input[name='phone']").val();
-  const $cartItems = JSON.parse(localStorage.cart);
+  $('.placeOrder').on('submit', function(event) {
+    event.preventDefault();
+    const $name = $(this)
+      .find("input[name='name']")
+      .val();
+    const $phone = $(this)
+      .find("input[name='phone']")
+      .val();
+    const $cartItems = JSON.parse(localStorage.cart);
 
-  $.ajax({
-    method: 'POST',
-    url: '/order',
-    data: {
-      name: $name, 
-      phone: $phone,
-      cartItems: $cartItems,
-    }
+    $.ajax({
+      method: 'POST',
+      url: '/order',
+      data: {
+        name: $name,
+        phone: $phone,
+        cartItems: $cartItems
+      }
     })
-    .done((response) => {
-      $('#cartitems').empty();
-      $('#cart').text("Thank you for your order");
-    })      
-    .fail(error => {
-    console.log(`Order Post Error: ${error}`);
-    })
-    .always(() => {
-    console.log('Order Post completed.');
-    });
-  });  
+      .done(response => {
+        $('#cartitems').empty();
+        $('#cart').text('Thank you for your order');
+      })
+      .fail(error => {
+        console.log(`Order Post Error: ${error}`);
+      })
+      .always(() => {
+        console.log('Order Post completed.');
+      });
+  });
 });
