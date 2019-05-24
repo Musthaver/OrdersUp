@@ -58,10 +58,8 @@ app.get('/', (req, res) => {
     .leftOuterJoin('foods','foods.category_id','categories.id')
     .orderBy('categories.id')
     .then(results => {
-      console.log(results);
       const arrayOfCategories = [];
       for (const obj of results) {
-        // console.log(obj);
         if (arrayOfCategories.includes(obj.category) === false) {
           arrayOfCategories.push(obj.category);
         }
@@ -81,7 +79,11 @@ app.post('/cart', (req, res) => {
 
 app.delete('/cart', (req, res) => {
   res.end()
-})
+});
+
+app.post('/order', (req, res) => {
+  res.end()
+});
 
 app.listen(PORT, () => {
   console.log('Example app listening on port ' + PORT);

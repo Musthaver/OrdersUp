@@ -69,7 +69,20 @@
       </section>
       <% }; %>
     </main>
-    <aside id="cart"><button class="compose">Checkout</button></aside>
+    <aside id="cart">
+      <div id="cartitems">
+      </div>
+    <div id="total">
+      <p class="Subtotal">Subtotal:</p>
+      <p class="Taxes">Taxes:</p>
+      <p class="Total">Total:</p>
+    </div>
+    <form method="POST" action="/order">
+      <input type="text" name="name" placeholder="Name" Required>
+      <input type="tel" name="phone" pattern="[\+]\d{2}[\(]\d{2}[\)]\d{4}[\-]\d{4}">
+      <button type="submit" class="btn btn-primary">Place my order</button>
+    </form>
+    </aside>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
