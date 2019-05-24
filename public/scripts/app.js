@@ -28,7 +28,6 @@ let fakeTable = {
     name: 'food1',
     price: 'one milion $'
   }
-
 };
 
 const calculateTotal = fakeTable => {
@@ -50,17 +49,15 @@ const displayCart = function(foodID) {
   const $delete = $('<i>')
     .addClass('fas fa-times-circle')
     .on('click', function(event) {
-     
       event.preventDefault();
       $.ajax({
         url: '/cart',
-        method: 'DELETE',
-      })
-        .done(function() {
-          delete fakeTable[foodID]
-          $( "#cart" ).empty()
-          renderFoods(fakeTable)
-        });
+        method: 'DELETE'
+      }).done(function() {
+        delete fakeTable[foodID];
+        $('#cart').empty();
+        renderFoods(fakeTable);
+      });
     });
 
   $article.append($foodName);
@@ -101,11 +98,11 @@ $(function() {
     })
       .done(response => {
         addItemToStorage(foodID);
-        localStorage.setItem('fakeTable', fakeTable[foodID].name);
-        const retrievedObject = localStorage.getItem('fakeTable');
-        console.log(retrievedObject);
-        $( "#cart" ).empty()
-        renderFoods(fakeTable)
+        localStorage.setItem('testObject', JSON.stringify(fakeTable))
+        var retrievedObject = localStorage.getItem('fakeTable');
+        console.log('retrievedObject: ', JSON.parse(retrievedObject));
+        $('#cart').empty();
+        renderFoods(fakeTable);
       })
       .fail(error => {
         console.log(`Error: ${error}`);
