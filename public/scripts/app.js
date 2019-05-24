@@ -11,6 +11,9 @@ const request = (options, cb) => {
     .always(() => console.log('Request completed.'));
 };
 
+
+
+
 let fakeTable = {
   1: {
     name: 'Nicolas Cage?',
@@ -30,22 +33,22 @@ let fakeTable = {
   }
 };
 
-const calculateTotal = fakeTable => {
+const calculateTotal = items => {
   const cartArray = [];
-  for (const keyID in fakeTable) {
-    cartArray.push(fakeTable[keyID].price);
+  for (const keyID in items) {
+    cartArray.push(items[keyID].price);
   }
   return cartArray.reduce((a, b) => a + b);
 };
 
-const displayCart = function(foodID) {
+const displayCart = function(foodID, items) {
   const $article = $('<article>');
   const $foodName = $('<div>')
     .addClass('foodName')
-    .text(fakeTable[foodID].name);
+    .text(items[foodID].name);
   const $price = $('<div>')
     .addClass('price')
-    .text(fakeTable[foodID].price);
+    .text(items[foodID].price);
   const $delete = $('<i>')
     .addClass('fas fa-times-circle')
     .on('click', function(event) {
@@ -54,9 +57,9 @@ const displayCart = function(foodID) {
         url: '/cart',
         method: 'DELETE'
       }).done(function() {
-        delete fakeTable[foodID];
+        delete items[foodID];
         $('#cart').empty();
-        renderFoods(fakeTable);
+        renderFoods(items);
       });
     });
 
@@ -68,15 +71,19 @@ const displayCart = function(foodID) {
 };
 
 const addItemToStorage = foodID => {
-  fakeTable[foodID] = {
+  if(!localStorage.cart){
+    localStorage.setItem('cart', "")
+  }
+  let foodObj = JSON.stringify({
     name: foodID,
     price: foodID + 1
-  };
+  })
+  localStorage.setItem([foodID], foodObj)
 };
 
-const renderFoods = fakeTable => {
-  for (const keyID in fakeTable) {
-    $('#cart').append(displayCart(keyID));
+const renderFoods = items => {
+  for (const keyID in items) {
+    $('#cart').append(displayCart(keyID, items));
   }
 };
 
@@ -98,11 +105,10 @@ $(function() {
     })
       .done(response => {
         addItemToStorage(foodID);
-        localStorage.setItem('testObject', JSON.stringify(fakeTable))
-        var retrievedObject = localStorage.getItem('fakeTable');
-        console.log('retrievedObject: ', JSON.parse(retrievedObject));
+        const items = {...localStorage};
+        console.log(items);
         $('#cart').empty();
-        renderFoods(fakeTable);
+        renderFoods(items);
       })
       .fail(error => {
         console.log(`Error: ${error}`);
