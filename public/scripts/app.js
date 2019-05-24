@@ -133,7 +133,6 @@ $('.placeOrder').on('submit', function(event) {
     .done((response) => {
       $('#cartitems').empty();
       $('#cart').text("Thank you for your order");
-
     })      
     .fail(error => {
     console.log(`Order Post Error: ${error}`);
