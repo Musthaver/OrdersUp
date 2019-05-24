@@ -119,4 +119,32 @@ $(function() {
   });
 
   renderFoods(fakeTable);
+
+
+$('.placeOrder').on('submit', function(event) {
+  event.preventDefault();
+  const $name = $(this).find("input[name='name']").val();
+  const $phone = $(this).find("input[name='phone']").val();
+  const $cartItems = JSON.parse(localStorage.cart);
+
+  $.ajax({
+    method: 'POST',
+    url: '/order',
+    data: {
+      name: $name, 
+      phone: $phone,
+      cartItems: $cartItems,
+    }
+    })
+    .done((response) => {
+      $('#cartitems').empty();
+      $('#cart').text("Thank you for your order");
+    })      
+    .fail(error => {
+    console.log(`Order Post Error: ${error}`);
+    })
+    .always(() => {
+    console.log('Order Post completed.');
+    });
+  });  
 });
