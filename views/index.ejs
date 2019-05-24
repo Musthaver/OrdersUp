@@ -38,7 +38,7 @@
     <img class="logo" src="/img/utensils.png" />
     <span class="header">Order's Up</span>
   </nav>
-  <menu>
+  <nav id="menu">
     <ul class="nav">
       <% for (const category of categories) { %>
       <li class="nav-item">
@@ -48,35 +48,24 @@
       </li>
       <% }; %>
     </ul>
-  </menu>
+  </nav>
   <body>
     <main>
       <% for (const category of categories) { %>
       <section id="<%=category%>">
         <h4><%=category%></h4>
         <div class="food-cards">
-        <% for (const foodObj of results) { %> <% if (foodObj.category ===
-        category) { %>
-        <article
-          class="<%= foodObj.id%>"
-          style="width: 18rem;"
-      
-        >
-          <img
-            class="card-img-top"
-            alt="Food image"
-            src="<%= foodObj.image%>"
-          />
+          <% for (const foodObj of results) { %> <% if (foodObj.category ===
+          category) { %>
+          <article class="<%= foodObj.id%>">
+          <img class="card-img-top" alt="Food image" src="<%= foodObj.image%>"/>
           <div class="card-body">
-            <span
-              ><h4><%= foodObj.name%></h4>
-              <h5><%= foodObj.price%></h5></span
-            >
+            <div class="text"><h5><%= foodObj.name%></h5><h6><%= foodObj.price%></h6></div>
             <p class="card-text"><%= foodObj.description%></p>
           </div>
-        </article>
+          </article>
         <% } %> <% }; %>
-      </div>
+        </div>
       </section>
       <% }; %>
     </main>

@@ -2,21 +2,54 @@ body {
   background-color: #EEE
 }
 main {
-  background-color: #EEE
+  background-color: #EEE;
 }
 section {
   margin: 10px;
   padding: 10px;
   background: white;
+  
+  h4 {
+    margin: 0.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid #eee;
+  }
 
   .food-cards {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: space-evenly;
 
-    div .card {
-      padding: 20px 10px;
-    }  
+    article {
+      margin: 5px;
+      width: 16rem;
+      border: solid 1px #eee;
+      border-radius: 5px;
+
+      div.card-body { 
+        padding: 0.8em;
+
+        div.text{
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+        }
+        p {
+          margin-top: 0.5em;
+          font-size: 0.8em;
+        }
+      }
+    } 
+    
+    article:hover {
+        -webkit-transform: scale(1.02);
+        -ms-transform: scale(1.02);
+        transform: scale(1.02);
+    }
   }
 }
 
+aside {
+  float: right;
+}

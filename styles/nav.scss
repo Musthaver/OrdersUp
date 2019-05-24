@@ -24,11 +24,14 @@
   line-height: 2.5em;
 }
   
-menu {
+#menu {
   padding-top: 80px;
   background-color: white;
   li {
-    padding: 0px 10px 20px 10px;
+    padding: 1em 0.5em;
+    a {
+    text-decoration: none;
+    }
   }
 }  
   
