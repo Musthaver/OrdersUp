@@ -112,12 +112,11 @@ app.delete('/cart', (req, res) => {
 });
 
 app.post('/order', (req, res) => {
-  console.log(req.body)
-  // client.messages
+  client.messages
   // .create({
-  //    body: req.body.name + req.body.phone,
+  //    body: 'Hello ' + req.body.name + ', we have advised the restaurant of your order and we will advise you of the estimated pick-up time.',
   //    from: '+14387963966',
-  //    to: '+15148059285'
+  //    to: '+' + req.body.phone
   //  })
   // .then(message => console.log(message.sid));
   res.end()

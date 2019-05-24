@@ -40,7 +40,6 @@ const displayCart = function(foodObj, items) {
         localStorage.removeItem(clearReal[foodObj]);
         foodArray = [];
         $('#cartitems').empty();
-        console.log(clearReal)
         renderFoods(JSON.parse({...localStorage}.cart));
       });
     });
@@ -81,10 +80,9 @@ $(function() {
       data: foodID
     })
       .done(response => {
-        console.log(response[0]);
         addItemToStorage(response[0]);
-        let subtotal = calculateTotal(JSON.parse({...localStorage}.cart)
-        $('.subtotal').text('Subtotal: $' + subtotal));
+        let subtotal = calculateTotal(JSON.parse({...localStorage}.cart));
+        $('.subtotal').text('Subtotal: $' + subtotal);
         let items = { ...localStorage };
         $('#cartitems').empty();
         items = JSON.parse(items.cart);
@@ -120,6 +118,7 @@ $(function() {
       .done(response => {
         $('#cartitems').empty();
         $('#cart').text('Thank you for your order');
+        localStorage.clear();
       })
       .fail(error => {
         console.log(`Order Post Error: ${error}`);
