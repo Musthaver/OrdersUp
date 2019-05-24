@@ -13,30 +13,22 @@ const request = (options, cb) => {
 
 let fakeTable = {
   1: {
-    img: 'https://www.placecage.com/200/300',
     name: 'Nicolas Cage?',
-    description: 'best actor in the goddamn world',
     price: 999999
   },
   2: {
-    img: 'https://www.placecage.com/g/200/300',
     name: 'Nicolas Cage!',
-    description: 'best actor on the goddamn planet',
     price: 3
   },
   3: {
-    img: 'https://www.placecage.com/c/200/300',
     name: 'Nicolas Cage!!!!!',
-    description: 'best actor in the goddamn UNIVERSE',
     price: 1000
-  }
-};
-
-let storeTest = {
-  key1: {
+  },
+  4: {
     name: 'food1',
     price: 'one milion $'
   }
+
 };
 
 const calculateTotal = fakeTable => {
@@ -47,18 +39,28 @@ const calculateTotal = fakeTable => {
   return cartArray.reduce((a, b) => a + b);
 };
 
-const displayCart = function(food) {
+const displayCart = function(foodID) {
   const $article = $('<article>');
   const $foodName = $('<div>')
     .addClass('foodName')
-    .text(food.name);
+    .text(fakeTable[foodID].name);
   const $price = $('<div>')
     .addClass('price')
-    .text(food.price);
+    .text(fakeTable[foodID].price);
   const $delete = $('<i>')
     .addClass('fas fa-times-circle')
-    .on('click', function() {
-      alert('Deleted');
+    .on('click', function(event) {
+     
+      event.preventDefault();
+      $.ajax({
+        url: '/cart',
+        method: 'DELETE',
+      })
+        .done(function() {
+          delete fakeTable[foodID]
+          $( "#cart" ).empty()
+          renderFoods(fakeTable)
+        });
     });
 
   $article.append($foodName);
@@ -69,16 +71,16 @@ const displayCart = function(food) {
 };
 
 const addItemToStorage = foodID => {
-  storeTest[foodID] = {
+  fakeTable[foodID] = {
     name: foodID,
     price: foodID + 1
   };
 };
 
 const renderFoods = fakeTable => {
-  $.each(fakeTable, (index, keyID) => {
+  for (const keyID in fakeTable) {
     $('#cart').append(displayCart(keyID));
-  });
+  }
 };
 
 $(function() {
@@ -87,6 +89,7 @@ $(function() {
       .addClass('total')
       .text(calculateTotal(fakeTable))
   );
+
   $('main article').on('click', function(event) {
     event.preventDefault();
     const foodID = $(this).attr('class');
@@ -97,10 +100,11 @@ $(function() {
     })
       .done(response => {
         addItemToStorage(foodID);
-        localStorage.setItem('storeTest', storeTest[foodID].name);
-        const retrievedObject = localStorage.getItem('storeTest');
+        localStorage.setItem('fakeTable', fakeTable[foodID].name);
+        const retrievedObject = localStorage.getItem('fakeTable');
         console.log(retrievedObject);
-        displayCart(storeTest[foodID]);
+        $( "#cart" ).empty()
+        renderFoods(fakeTable)
       })
       .fail(error => {
         console.log(`Error: ${error}`);

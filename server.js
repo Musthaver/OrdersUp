@@ -79,6 +79,10 @@ app.post('/cart', (req, res) => {
   res.end()
 });
 
+app.delete('/cart', (req, res) => {
+  res.end()
+})
+
 app.listen(PORT, () => {
   console.log('Example app listening on port ' + PORT);
 });
