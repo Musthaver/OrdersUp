@@ -49,28 +49,31 @@ app.use('/img', express.static(path.join(__dirname, 'public/img')));
 app.get('/', (req, res) => {
   knex
     .select(
-      'foods.id as id',
-      'foods.name',
+      'categories.name as category',
+      'foods.id',
+      'foods.name as name',
       'foods.price',
       'foods.description',
-      'foods.image',
-      'categories.name as category',
-    )
-    .from('foods')
-    .innerJoin('categories','foods.category_id','categories.id')
+      'foods.image')
+    .from('categories')
+    .leftOuterJoin('foods','foods.category_id','categories.id')
+    .orderBy('categories.id')
     .then(results => {
       console.log(results);
-      // res.json(results)
-      res.render('index', { results: results })
+      const arrayOfCategories = [];
+      for (const obj of results) {
+        // console.log(obj);
+        if (arrayOfCategories.includes(obj.category) === false) {
+          arrayOfCategories.push(obj.category);
+        }
+      }
+
+      res.render('index', {results, categories: arrayOfCategories})
       })
     .catch(function (err) {
       console.log(err)
       })
     .finally(()=> knex.destroy());
-
-  // console.log(results)
-  //   // const templateVars = { foods: foods };
-  //   res.render('index', templateVars);
 });
 
 app.post('/cart', (req, res) => {

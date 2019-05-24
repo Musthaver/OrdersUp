@@ -3,17 +3,16 @@ body {
   
 }
 
-  main {
-    padding-top: 90px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    div .card {
-      padding: 20px 10px;
-     
-      span {
+section {
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  div .card {
+    padding: 20px 10px;
+    span {
 
-      }
     }
   }
+}
 

@@ -15,8 +15,13 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
-<!-- External -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <!-- External -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+      integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay"
+      crossorigin="anonymous"
+    />
 
     <!-- App CSS -->
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
@@ -26,26 +31,54 @@
     <link rel="stylesheet" href="/styles/nav.css" type="text/css" />
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
     <script type="text/javascript" src="/scripts/app.js"></script>
-  
+
     <title>Order's Up</title>
   </head>
   <nav id="nav-bar">
-      <img class="logo" src="/img/utensils.png" />
-      <span class="header">Order's Up</span>
-    </nav>
+    <img class="logo" src="/img/utensils.png" />
+    <span class="header">Order's Up</span>
+  </nav>
+  <menu>
+    <ul class="nav">
+      <% for (const category of categories) { %>
+      <li class="nav-item">
+        <a class="nav-link-<%=category%>" href="#<%=category%>"
+          ><%=category%></a
+        >
+      </li>
+      <% }; %>
+    </ul>
+  </menu>
   <body>
-      <main>
-        <% for (const food in results) { %>
-        <div class="<%= results[food].id%>" style="width: 18rem;" onclick="alert('<%= results[food].name %>')">
-          <img class="card-img-top" alt="Food image" src='<%= results[food].image%>'>
+    <main>
+      <% for (const category of categories) { %>
+      <section id="<%=category%>">
+        <h4><%=category%></h4>
+        <% for (const foodObj of results) { %> <% if (foodObj.category ===
+        category) { %>
+        <div
+          class="<%= foodObj.id%>"
+          style="width: 18rem;"
+          onclick="alert('<%= foodObj.name %>')"
+        >
+          <img
+            class="card-img-top"
+            alt="Food image"
+            src="<%= foodObj.image%>"
+          />
           <div class="card-body">
-          <span><h4> <%= results[food].name%></h4><h5><%= results[food].price%></h5></span>
-          <p class="card-text"><%= results[food].description%></p>
+            <span
+              ><h4><%= foodObj.name%></h4>
+              <h5><%= foodObj.price%></h5></span
+            >
+            <p class="card-text"><%= foodObj.description%></p>
           </div>
         </div>
-        <% }; %>
+        <% } %> <% }; %>
+      </section>
+      <% }; %>
     </main>
-    <aside id="cart"> <button class="compose">Checkout</button></aside> 
+    <aside id="cart"><button class="compose">Checkout</button></aside>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
