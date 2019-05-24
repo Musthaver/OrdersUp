@@ -84,6 +84,7 @@ const renderFoods = fakeTable => {
 };
 
 $(function() {
+  $(this).scrollTop(0);
   $('#cart').append(
     $('<div>')
       .addClass('total')

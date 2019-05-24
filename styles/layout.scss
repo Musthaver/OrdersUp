@@ -1,22 +1,83 @@
+// body{
+//   display:flex;
+//   flex-wrap:wrap;
+//   align-items:top;
+// }
+// nav{
+//   width:100%;
+// }
+// main{
+//   width:calc(100% - 300px);
+// }
+
+
 body {
-  background-color: #EEE
-}
-main {
-  background-color: #EEE
-}
-section {
-  margin: 10px;
-  padding: 10px;
-  background: white;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:top;
+  background-color: #EEE;
+  margin-top: 140px;
 
-  .food-cards {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+  main {
+    width: calc(100% - 300px);
+    background-color: #EEE;
+  
+    section {
+      margin: 10px;
+      padding: 10px;
+      background: white;
+      
+      h4 {
+        margin: 0.5em;
+        padding-bottom: 0.3em;
+        border-bottom: 1px solid #eee;
+      }
 
-    div .card {
-      padding: 20px 10px;
-    }  
+      .food-cards {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        // justify-content: space-evenly;
+
+        article {
+          margin: 5px;
+          width: 16rem;
+          border: solid 1px #eee;
+          border-radius: 5px;
+
+          div.card-body { 
+            padding: 0.8em;
+
+            div.text{
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+            }
+            p {
+              margin-top: 0.5em;
+              font-size: 0.8em;
+            }
+          }
+        } 
+        
+        article:hover {
+            -webkit-transform: scale(1.02);
+            -ms-transform: scale(1.02);
+            transform: scale(1.02);
+        }
+      }
+    }
+  }
+  aside {
+    width:30%;
+    height:100vh;
+    align-self:top;
+    position:fixed;
+    right:0;
+    top:70px;
+    width:300px;
+    margin-top: 65px;
   }
 }
+
 
