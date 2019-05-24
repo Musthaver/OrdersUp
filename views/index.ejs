@@ -54,6 +54,7 @@
       <% for (const category of categories) { %>
       <section id="<%=category%>">
         <h4><%=category%></h4>
+        <div class="food-cards">
         <% for (const foodObj of results) { %> <% if (foodObj.category ===
         category) { %>
         <div
@@ -75,6 +76,7 @@
           </div>
         </div>
         <% } %> <% }; %>
+      </div>
       </section>
       <% }; %>
     </main>
