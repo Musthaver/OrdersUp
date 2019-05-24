@@ -37,11 +37,10 @@ const displayCart = function(foodObj, items) {
       }).done(function() {
         const clear = { ...localStorage };
         const clearReal = JSON.parse(clear.cart);
-        localStorage.removeItem(clearReal[foodObj]);
-        foodArray = [];
-        $('#cartitems').empty();
+        localStorage.setItem('cart', clearReal.filter(obj => obj.name !== foodObj.name))
+        foodArray = [clear.cart];
         console.log(clearReal)
-        renderFoods(JSON.parse({...localStorage}.cart));
+        // renderFoods(JSON.parse({...localStorage}.cart));
       });
     });
 

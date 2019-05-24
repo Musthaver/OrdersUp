@@ -113,13 +113,14 @@ app.delete('/cart', (req, res) => {
 
 app.post('/order', (req, res) => {
   console.log(req.body)
-  // client.messages
-  // .create({
-  //    body: req.body.name + req.body.phone,
-  //    from: '+14387963966',
-  //    to: '+15148059285'
-  //  })
-  // .then(message => console.log(message.sid));
+  client.messages
+  .create({
+     body: req.body.name + req.body.phone,
+     from: '+14387963966',
+    //  to: '+15148059285'
+     to: '+16472683156'
+   })
+  .then(message => console.log(message.sid));
   res.end()
 });
 
