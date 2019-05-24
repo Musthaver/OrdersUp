@@ -64,17 +64,28 @@ app.get('/', (req, res) => {
           arrayOfCategories.push(obj.category);
         }
       }
-
       res.render('index', {results, categories: arrayOfCategories})
-      })
+    })
     .catch(function (err) {
       console.log(err)
-      })
+    })
     .finally(()=> knex.destroy());
 });
 
 app.post('/cart', (req, res) => {
-  res.end()
+  let foodID = req.body.id; //.data?
+  knex
+  .select()
+  .from('foods')
+  .where('foods.id', foodID)
+  .orderBy('categories.id')
+  .then(results => {
+    res.send(results)
+  })
+  .catch(function (err) {
+    console.log(err)
+  })
+  .finally(()=> knex.destroy());
 });
 
 app.delete('/cart', (req, res) => {
