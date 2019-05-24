@@ -41,14 +41,14 @@ const calculateTotal = items => {
   return cartArray.reduce((a, b) => a + b);
 };
 
-const displayCart = function(foodID, items) {
+const displayCart = function(foodObj, items) {
   const $article = $('<article>');
   const $foodName = $('<div>')
     .addClass('foodName')
-    .text(items[foodID].name);
+    .text(foodObj.name);
   const $price = $('<div>')
     .addClass('price')
-    .text(items[foodID].price);
+    .text(foodObj.price);
   const $delete = $('<i>')
     .addClass('fas fa-times-circle')
     .on('click', function(event) {
@@ -57,33 +57,40 @@ const displayCart = function(foodID, items) {
         url: '/cart',
         method: 'DELETE'
       }).done(function() {
-        delete items[foodID];
-        $('#cart').empty();
-        renderFoods(items);
+        const clear = {...localStorage}
+        const clearReal = JSON.parse(clear.cart)
+        localStorage.removeItem(clearReal[foodObj]);
+        foodArray = []
+        $('#cartitems').empty();
+        
+        renderFoods();
       });
     });
 
   $article.append($foodName);
   $article.append($price);
   $article.append($delete);
-  $('#cart').append($article);
-  return $('#cart');
+  $('#cartitems').append($article);
+  return $('#cartitems');
 };
 
+let foodArray = []
 const addItemToStorage = foodID => {
   if(!localStorage.cart){
-    localStorage.setItem('cart', "")
+    localStorage.setItem('cart', '')
   }
-  let foodObj = JSON.stringify({
+  console.log(localStorage.cart)
+  let foodObj = {
     name: foodID,
     price: foodID + 1
-  })
-  localStorage.setItem([foodID], foodObj)
+  }
+  foodArray.push(foodObj)
+  localStorage.setItem('cart', JSON.stringify(foodArray))
 };
 
-const renderFoods = items => {
-  for (const keyID in items) {
-    $('#cart').append(displayCart(keyID, items));
+const renderFoods = itemsArray => {
+  for (const foodObj of itemsArray) {
+    $('#cartitems').append(displayCart(foodObj, itemsArray));
   }
 };
 
@@ -105,9 +112,9 @@ $(function() {
     })
       .done(response => {
         addItemToStorage(foodID);
-        const items = {...localStorage};
-        console.log(items);
-        $('#cart').empty();
+        let items = {...localStorage};
+        $('#cartitems').empty();
+        items = JSON.parse(items.cart)
         renderFoods(items);
       })
       .fail(error => {
@@ -118,5 +125,5 @@ $(function() {
       });
   });
 
-  renderFoods(fakeTable);
+  // renderFoods(fakeTable);
 });
