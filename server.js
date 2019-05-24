@@ -36,17 +36,9 @@ http.createServer(app).listen(1337, () => {
 });
 
 
-// client.messages
-//   .create({
-//      body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
-//      from: '+14387963966',
-//      to: '+15148059285'
-//    })
-//   .then(message => console.log(message.sid));
-
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.
-//         The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
+        // The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
 app.use(morgan('dev'));
 
 // Log knex SQL queries to STDOUT as well
@@ -121,6 +113,13 @@ app.delete('/cart', (req, res) => {
 
 app.post('/order', (req, res) => {
   console.log(req.body)
+  // client.messages
+  // .create({
+  //    body: req.body.name + req.body.phone,
+  //    from: '+14387963966',
+  //    to: '+15148059285'
+  //  })
+  // .then(message => console.log(message.sid));
   res.end()
 });
 
