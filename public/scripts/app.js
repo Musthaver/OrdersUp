@@ -11,12 +11,12 @@ const request = (options, cb) => {
     .always(() => console.log('Request completed.'));
 };
 
-const calculateTotal = items => {
-  const cartArray = [];
-  for (const keyID in items) {
-    cartArray.push(items[keyID].price);
+const calculateTotal = cartArray => {
+  const priceArray = [];
+  for (const keyID of cartArray) {
+    priceArray.push(Number(keyID.price));
   }
-  return cartArray.reduce((a, b) => a + b);
+  return priceArray.reduce((a, b) => a + b);
 };
 
 const displayCart = function(foodObj, items) {
@@ -53,14 +53,10 @@ const displayCart = function(foodObj, items) {
 };
 
 let foodArray = [];
-const addItemToStorage = foodID => {
+const addItemToStorage = foodObj => {
   if (!localStorage.cart) {
     localStorage.setItem('cart', '');
   }
-  let foodObj = {
-    name: foodID,
-    price: foodID + 1
-  };
   foodArray.push(foodObj);
   localStorage.setItem('cart', JSON.stringify(foodArray));
 };
@@ -73,11 +69,8 @@ const renderFoods = itemsArray => {
 
 $(function() {
   $(this).scrollTop(0);
-  // $('#cart').append(
-  //   $('<div>')
-  //     .addClass('total')
-  //     .text(calculateTotal(fakeTable))
-  // );
+
+  // $('.subtotal').text('Subtotal: $' + calculateTotal(JSON.parse({...localStorage}.cart)));
 
   $('main article').on('click', function(event) {
     event.preventDefault();
@@ -88,7 +81,10 @@ $(function() {
       data: foodID
     })
       .done(response => {
+        console.log(response[0]);
         addItemToStorage(response[0]);
+        let subtotal = calculateTotal(JSON.parse({...localStorage}.cart)
+        $('.subtotal').text('Subtotal: $' + subtotal));
         let items = { ...localStorage };
         $('#cartitems').empty();
         items = JSON.parse(items.cart);
