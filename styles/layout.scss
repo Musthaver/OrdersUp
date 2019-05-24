@@ -1,55 +1,83 @@
+// body{
+//   display:flex;
+//   flex-wrap:wrap;
+//   align-items:top;
+// }
+// nav{
+//   width:100%;
+// }
+// main{
+//   width:calc(100% - 300px);
+// }
+
+
 body {
-  background-color: #EEE
-}
-main {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:top;
   background-color: #EEE;
-}
-section {
-  margin: 10px;
-  padding: 10px;
-  background: white;
+  margin-top: 140px;
+
+  main {
+    width: calc(100% - 300px);
+    background-color: #EEE;
   
-  h4 {
-    margin: 0.5em;
-    padding-bottom: 0.3em;
-    border-bottom: 1px solid #eee;
-  }
+    section {
+      margin: 10px;
+      padding: 10px;
+      background: white;
+      
+      h4 {
+        margin: 0.5em;
+        padding-bottom: 0.3em;
+        border-bottom: 1px solid #eee;
+      }
 
-  .food-cards {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+      .food-cards {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        // justify-content: space-evenly;
 
-    article {
-      margin: 5px;
-      width: 16rem;
-      border: solid 1px #eee;
-      border-radius: 5px;
+        article {
+          margin: 5px;
+          width: 16rem;
+          border: solid 1px #eee;
+          border-radius: 5px;
 
-      div.card-body { 
-        padding: 0.8em;
+          div.card-body { 
+            padding: 0.8em;
 
-        div.text{
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-        }
-        p {
-          margin-top: 0.5em;
-          font-size: 0.8em;
+            div.text{
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+            }
+            p {
+              margin-top: 0.5em;
+              font-size: 0.8em;
+            }
+          }
+        } 
+        
+        article:hover {
+            -webkit-transform: scale(1.02);
+            -ms-transform: scale(1.02);
+            transform: scale(1.02);
         }
       }
-    } 
-    
-    article:hover {
-        -webkit-transform: scale(1.02);
-        -ms-transform: scale(1.02);
-        transform: scale(1.02);
     }
+  }
+  aside {
+    width:30%;
+    height:100vh;
+    align-self:top;
+    position:fixed;
+    right:0;
+    top:70px;
+    width:300px;
+    margin-top: 65px;
   }
 }
 
-aside {
-  float: right;
-}
+

@@ -72,7 +72,7 @@ app.get('/', (req, res) => {
     .catch(function (err) {
       console.log(err)
       })
-    // .finally(()=> knex.destroy());
+    .finally(()=> knex.destroy());
 });
 
 app.post('/cart', (req, res) => {
