@@ -8,7 +8,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const sass = require('node-sass-middleware');
 const app = express();
-const path = require('path');
 const knexConfig = require('./knexfile');
 const knex = require('knex')(knexConfig[ENV]);
 const morgan = require('morgan');
@@ -38,12 +37,12 @@ app.use(
 );
 app.use(express.static('public'));
 // app.use("/public", express.static(__dirname + '/public'));
-app.use('/img',express.static(path.join(__dirname, 'public/img')));
+// app.use('/img',express.static(path.join(__dirname, 'public/img')));
 
 
 // Mount all resource routes
 app.use('/api/users', usersRoutes(knex));
-app.use('/img', express.static(path.join(__dirname, 'public/img')));
+// app.use('/img', express.static(path.join(__dirname, 'public/img')));
 
 // Home page
 app.get('/', (req, res) => {
@@ -62,7 +61,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/cart', (req, res) => {
-  
+  res.end()
 });
 
 app.listen(PORT, () => {

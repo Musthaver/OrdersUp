@@ -11,7 +11,7 @@ const request = (options, cb) => {
     .always(() => console.log('Request completed.'));
 };
 
-const fakeTable = {
+let fakeTable = {
   1: {
     img: 'https://www.placecage.com/200/300',
     name: 'Nicolas Cage?',
@@ -29,6 +29,13 @@ const fakeTable = {
     name: 'Nicolas Cage!!!!!',
     description: 'best actor in the goddamn UNIVERSE',
     price: 1000
+  }
+};
+
+let storeTest = {
+  key1: {
+    name: 'food1',
+    price: 'one milion $'
   }
 };
 
@@ -57,46 +64,43 @@ const displayCart = function(food) {
   $article.append($foodName);
   $article.append($price);
   $article.append($delete);
-
-  return $article;
+  $('#cart').append($article);
+  return $('#cart');
 };
-// //"Refreshes" the page after adding a single tweet
-// const loadOneFood = fakeTable2 => {
-//   // const reqOptions = {
-//   //   method: 'GET',
-//   //   url: '/cart',
-//   //   dataType: 'json'
-//   // };
-//   // // Trigger the Ajax request using reqOptions
-//   // request(reqOptions, fakeTable2 => {
-//   $('#cart').append(displayCart(fakeTable2));
-//   // });
-// };
 
-const addItemToCart = (food) => {
-  $('#cart')
-    .append('<div>')
-    .text(food.name);
+const addItemToStorage = foodID => {
+  storeTest[foodID] = {
+    name: foodID,
+    price: foodID + 1
+  };
+};
+
+const renderFoods = fakeTable => {
+  $.each(fakeTable, (index, keyID) => {
+    $('#cart').append(displayCart(keyID));
+  });
 };
 
 $(function() {
-  renderFoods(fakeTable);
   $('#cart').append(
     $('<div>')
       .addClass('total')
       .text(calculateTotal(fakeTable))
   );
-
-  $('div .card').on('click', function(event) {
+  $('main div').on('click', function(event) {
     event.preventDefault();
+    const foodID = $(this).attr('class');
     $.ajax({
       method: 'POST',
       url: '/cart',
-      data: '/api/users'
+      data: foodID
     })
-      .done(foods => {
-        for (food of foods) {
-        addItemToCart(food)}
+      .done(response => {
+        addItemToStorage(foodID);
+        localStorage.setItem('storeTest', storeTest[foodID].name);
+        const retrievedObject = localStorage.getItem('storeTest');
+        console.log(retrievedObject);
+        displayCart(storeTest[foodID]);
       })
       .fail(error => {
         console.log(`Error: ${error}`);
@@ -105,108 +109,6 @@ $(function() {
         console.log('Request completed');
       });
   });
+
+  renderFoods(fakeTable);
 });
-
-const renderFoods = fakeTable => {
-  $.each(fakeTable, (index, keyID) => {
-    console.log("index", index);
-    console.log("KeyID", keyID);
-    $('#cart').append(displayCart(keyID));
-  });
-};
-
-// const loadTweets = () => {
-//   const reqOptions = {
-//     method: 'GET',
-//     url: '/tweets',
-//     dataType: 'json'
-//   };
-//   // Trigger the Ajax request using reqOptions
-//   request(reqOptions, tweet => {
-//     renderTweets(tweet);
-//   });
-// };
-
-// //"Refreshes" the page after adding a single tweet
-// const loadSingleTweet = () => {
-//   const reqOptions = {
-//     method: 'GET',
-//     url: '/tweets',
-//     dataType: 'json'
-//   };
-//   // Trigger the Ajax request using reqOptions
-//   request(reqOptions, tweet => {
-//     $('.tweet-container').prepend(createTweetElement(tweet.pop()));
-//   });
-// };
-
-// $(function() {
-//   const $inputError = $('.error');
-//   //Hide the error and the compose box then the page loads initially
-//   $inputError.hide();
-//   $('.new-tweet').hide();
-
-//   //Toggles the compose button on click
-//   $('.compose').click(function() {
-//     $('.new-tweet').slideToggle('fast');
-//     $('.text-area').focus();
-//   });
-
-//   //When the user clicks on submit, this function happens
-//   const $form = $('form');
-//   $form.on('submit', function(event) {
-//     event.preventDefault();
-//     const userInput = $(this).serialize();
-//     const count = $('.text-area').val().length;
-//     //Prevents the user to write a tweet longer than 140 characters and toggles an error message
-//     if (count > 140) {
-//       $inputError.slideUp('fast');
-//       $inputError
-//         .html('Please type less than 140 characters')
-//         .slideDown('fast');
-//       return;
-//     }
-//     //Prevents the user to post an empty tweet and toggles an error message
-//     if (count === 0) {
-//       $inputError.slideUp('fast');
-//       $inputError.html('Please type in a tweet').slideDown('fast');
-//       return;
-//     } else {
-//       $inputError.slideUp('fast');
-//       //If the conditions are met, make an AJAX post
-//       $.ajax({
-//         data: userInput,
-//         method: 'POST',
-//         url: '/tweets'
-//       })
-//         .done(function(reponse) {
-//           console.log('Success: ', reponse);
-//           //Resets the counter to 140
-//           $('#counter').html(140);
-//           //Empties the text box
-//           $('form')[0].reset();
-//           //Adds the tweet to the page
-//           loadSingleTweet();
-//         })
-//         .fail(error => {
-//           console.log(`Error: ${error}`);
-//         })
-//         .always(() => {
-//           console.log('Request completed');
-//         });
-//     }
-//   });
-//   //Adds the initial tweets to the page
-//   loadTweets();
-// });
-
-// $(() => {
-//   $.ajax({
-//     method: "GET",
-//     url: "/api/users"
-//   }).done((users) => {
-//     for(user of users) {
-//       $("<div>").text(user.name).appendTo($("body"));
-//     }
-//   });;
-// });
