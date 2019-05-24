@@ -73,19 +73,20 @@ app.get('/', (req, res) => {
 });
 
 app.post('/cart', (req, res) => {
-  let foodID = req.body.id; //.data?
-  knex
-  .select()
-  .from('foods')
-  .where('foods.id', foodID)
-  .orderBy('categories.id')
-  .then(results => {
-    res.send(results)
-  })
-  .catch(function (err) {
-    console.log(err)
-  })
-  .finally(()=> knex.destroy());
+  // let foodID = req.body.id; //.data?
+  // knex
+  // .select()
+  // .from('foods')
+  // .where('foods.id', foodID)
+  // .orderBy('categories.id')
+  // .then(results => {
+  //   res.send(results)
+  // })
+  // .catch(function (err) {
+  //   console.log(err)
+  // })
+  // .finally(()=> knex.destroy());
+  res.end();
 });
 
 app.delete('/cart', (req, res) => {
