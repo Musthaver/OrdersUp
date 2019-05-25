@@ -68,14 +68,28 @@ const displayCart = function(foodObj, items) {
   return $('#cartitems');
 };
 
-let foodArray = [];
+
 const addItemToStorage = foodObj => {
   if (!localStorage.cart) {
-    localStorage.setItem('cart', '');
+    let foodArray = [];
+    foodObj.quantity = 1;
+    foodArray.push(foodObj);
+    localStorage.setItem('cart', JSON.stringify(foodArray));
+  } else {    
+    const cart2 = JSON.parse(({...localStorage}.cart));  
+    console.log(cart2);
+      for (var i = 0; i < cart2.length; i++) {
+        console.log(cart2[i].name, foodObj.name);
+        if (cart2[i].name === foodObj.name) {
+          cart2[i].quantity = (cart2[i].quantity + 1);
+          console.log(cart2);
+          return localStorage.setItem('cart', JSON.stringify(cart2));
+        }  
+      } 
+      foodObj.quantity = 1;
+      cart2.push(foodObj);
+      localStorage.setItem('cart', JSON.stringify(cart2)); 
   }
-  console.log(localStorage.cart);
-  foodArray.push(foodObj);
-  localStorage.setItem('cart', JSON.stringify(foodArray));
 };
 
 const renderFoods = itemsArray => {
@@ -104,7 +118,6 @@ $(function() {
         let taxes = round(calculateTaxes(calculateTotal(JSON.parse({ ...localStorage }.cart))));
         $('.taxes').text('Taxes: $' + taxes);
         $('.total').text('Total: $' + round((subtotal+taxes)) )
-        console.log(subtotal)
         let items = { ...localStorage };
         $('#cartitems').empty();
         items = JSON.parse(items.cart);
