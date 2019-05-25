@@ -34,15 +34,20 @@ const round = number => {
 
 const displayCart = function(foodObj, items) {
   const $article = $('<article>');
-  const $quantity = $('<div>')
+  const $amount = $('<div>')
     .addClass('quantity')
+  const $add = $('<i>')
+    .addClass('fas fa-plus-circle');
+  const $quantity = $('<span>')
     .text(foodObj.quantity);
+  const $remove = $('<i>')
+    .addClass('fas fa-minus-circle');  
   const $foodName = $('<div>')
     .addClass('foodName')
     .text(foodObj.name);
   const $price = $('<div>')
     .addClass('price')
-    .text(foodObj.price);
+    .text('$' + foodObj.price);
   const $delete = $('<i>')
     .addClass('fas fa-times-circle')
     .on('click', function(event) {
@@ -66,7 +71,10 @@ const displayCart = function(foodObj, items) {
       });
     });
   
-  $article.append($quantity);
+  $amount.append($add);
+  $amount.append($quantity);
+  $amount.append($remove);
+  $article.append($amount);
   $article.append($foodName);
   $article.append($price);
   $article.append($delete);
