@@ -73,9 +73,9 @@ const deleteItem = (event, foodObj) => {
 const doTheMath = function(cart) {
   let subtotal = round(calculateTotal(cart));
   let taxes = round(calculateTaxes(calculateTotal(cart)));
-  $('.subtotal').text('Subtotal: $' + subtotal);
-  $('.taxes').text('Taxes: $' + taxes);
-  $('.total').text('Total: $' + round((subtotal+taxes)))
+  $('.subtotal').text('Subtotal: $' + subtotal.toFixed(2));
+  $('.taxes').text('Taxes: $' + taxes.toFixed(2));
+  $('.total').text('Total: $' + round((subtotal+taxes)).toFixed(2))
 }
 
 const removeToQuantity = (event, foodObj) => {
