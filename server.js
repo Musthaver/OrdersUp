@@ -99,6 +99,11 @@ app.post('/cart', (req, res) => {
     })
 });
 
+
+app.post('/cart/quantity', (req, res) => {
+  res.end();
+});  
+
 app.delete('/cart', (req, res) => {
   res.end();
 });
