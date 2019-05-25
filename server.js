@@ -110,7 +110,7 @@ const selectASingleFood = (foodID, res) => {
     .from('foods')
     .where('foods.id', foodID)
     .then(results => {
-      //result is an array with one object
+      //results is an array with one object
       res.send(results);
     })
     .catch(function(err) {
@@ -194,6 +194,9 @@ app.listen(PORT, () => {
 
 app.post('/sms', (req, res) => {
   let response = req.body.Body;
+  // knex knex('orders')
+  // .where({orders.id, =? })
+  // .update({ message: response })
   client.messages
   .create({
      body: `Hello ${clientName}, your order will be ready in ${response}`,
@@ -201,25 +204,9 @@ app.post('/sms', (req, res) => {
      to: `+${phoneNumber}`
    })
   .then(message => console.log(message.sid));
-
+  
+  // res.render('index', response);
   res.writeHead(200, {'Content-Type': 'text/xml'});
   res.end(twiml.toString());
 });
 
-
-//   $.ajax({
-//     url: '/cart/quantity',
-//     method: 'GET'
-//   }).done(function() {
-//     $('#cartitems').text(`Your order will be there in ${response}`)
-//   });
-//   res.writeHead(200, {'Content-Type': 'text/xml'});
-//   res.end(twiml.toString());
-// });
-
-// app.get('/cart/quantity', (req, res) => {
-
-  
-//   $('#cartitems').text(`Your order will be there in 30 min`)
-
-// })

@@ -117,15 +117,9 @@ const addToQuantity = (event, foodObj) => {
         localStorage.setItem('cart', JSON.stringify(cart));
       }
     } 
-    let subtotal = round(calculateTotal(JSON.parse({ ...localStorage }.cart)));
-    $('.subtotal').text('Subtotal: $' + subtotal);
-    let taxes = (calculateTaxes(calculateTotal(JSON.parse({ ...localStorage }.cart))));
-    $('.taxes').text('Taxes: $' + taxes);
-    $('.total').text('Total: $' + round((subtotal+taxes)))
-    let items = { ...localStorage };
+    doTheMath(cart);
     $('#cartitems').empty();
-    items = JSON.parse(items.cart);
-    renderFoods(items);
+    renderFoods(cart);
   });
 
 }
@@ -259,9 +253,19 @@ $(function() {
         $('#cartitems').empty();
         $('#cart').text(`Thank you for your order! Ordered at ${$time} on ${$date}`);
         localStorage.clear();
-      //   setTimeout(()=>{
-      //     ajax('/order/' + response.order_id+'/message').then((message)=> if() : 
-      //   }, 5000)
+        // setTimeout(() => {
+        //   $ajax({
+        //     method: 'GET',
+        //     url: ('/order/' + $id + '/message')
+        //   })
+        //   .done((message)=> if(message) {
+        //     $('#cart').text('Your order will be ready in ' + message)
+        //   })
+        //   .fail(error => {
+        //     console.log(`Order Post Error: ${error}`);
+        //   })
+        // }, 5000);
+
       })
       .fail(error => {
         console.log(`Order Post Error: ${error}`);
