@@ -120,7 +120,7 @@
       </div>
       <form class="placeOrder" method="POST" action="/order">
         <input type="text" name="name" placeholder="Name" Required>
-        <input type="text" name="phone">
+        <input type="text" name="phone" placeholder="1-514-555-4444" pattern="^1-?[0-9]{3}-?[0-9]{3}-?[0-9]{4}$">
         <button type="submit" class="btn btn-primary">Place my order</button>
       </form>
     </aside>
