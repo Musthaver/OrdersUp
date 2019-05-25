@@ -12,26 +12,25 @@ const knexConfig = require('./knexfile');
 const knex = require('knex')(knexConfig[ENV]);
 const morgan = require('morgan');
 const knexLogger = require('knex-logger');
-const client = require('twilio')(process.env.TWILIOACCOUNT, process.env.TWILIOTOKEN);
+const client = require('twilio')(
+  process.env.TWILIOACCOUNT,
+  process.env.TWILIOTOKEN
+);
 
 // Seperated Routes for each Resource
 const usersRoutes = require('./routes/users');
-
 
 //TWilio
 const http = require('http');
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
-
-
 http.createServer(app).listen(1337, () => {
   console.log('Express server listening on port 1337');
 });
 
-
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.
-        // The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
+// The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
 app.use(morgan('dev'));
 
 // Log knex SQL queries to STDOUT as well
@@ -81,7 +80,7 @@ app.get('/', (req, res) => {
     })
     .catch(function(err) {
       console.log(err);
-    })
+    });
 });
 
 app.post('/cart', (req, res) => {
@@ -96,13 +95,12 @@ app.post('/cart', (req, res) => {
     })
     .catch(function(err) {
       console.log(err);
-    })
+    });
 });
-
 
 app.post('/cart/quantity', (req, res) => {
   res.end();
-});  
+});
 
 app.delete('/cart', (req, res) => {
   res.end();
@@ -111,35 +109,39 @@ app.delete('/cart', (req, res) => {
 let phoneNumber;
 
 app.post('/order', (req, res) => {
-  phoneNumber = req.body.phone
-let order = ''
-  for (let orderObj of req.body.cartItems){
-       order += `${orderObj.name} `
+  phoneNumber = req.body.phone;
+  console.log(req.body);
+  let order = '';
+  for (let [i, orderObj] of req.body.cartItems.entries()) {
+    if (i === req.body.cartItems.length - 1) {
+      order += `${orderObj.name} x${orderObj.quantity}`;
+    } else {
+      order += `${orderObj.name} x${orderObj.quantity},  `;
+    }
   }
-  client.messages
-  .create({
-     body: `Hello ${req.body.name}, we have advised the restaurant of your order and we will advise you of the estimated pick-up time.`,
-     from: '+14387963088',
-     to: '+' + req.body.phone
-   })
-  .then(message => console.log(message.sid));
-  client.messages
-  .create({
-     body: `Hello, ${req.body.name} sent a new order of ${order} at ${req.body.time}`,
-     from: '+14387963088',
-     to: '+15148059285'
-   })
-  .then(message => console.log(message.sid));
-  res.end()
+  // client.messages
+  // .create({
+  //    body: `Hello ${req.body.name}, we have advised the restaurant of your order and we will advise you of the estimated pick-up time.`,
+  //    from: '+14387963088',
+  //  to: `+${phoneNumber}`
+  //  })
+  // .then(message => console.log(message.sid));
+  // client.messages
+  // .create({
+  //    body: `Hello, ${req.body.name} sent a new order of ${order} at ${req.body.time}. Please respond with an ETA for the order to be ready`,
+  //    from: '+14387963088',
+  //    to: '+15148059285'
+  //  })
+  // .then(message => console.log(message.sid));
+  res.end();
 });
 
 app.post('/sms', (req, res) => {
-  let response = (req.body.Body)
+  let response = req.body.Body;
   const twiml = new MessagingResponse();
 
-  
   twiml.message(response);
-  res.writeHead(200, {'Content-Type': 'text/xml'});
+  res.writeHead(200, { 'Content-Type': 'text/xml' });
   res.end(twiml.toString());
 });
 
@@ -147,11 +149,10 @@ app.listen(PORT, () => {
   console.log('Example app listening on port ' + PORT);
 });
 
-
 client.messages
   .create({
-     body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
-     from: '+15017122661',
-     to: '+15558675310'
-   })
+    body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
+    from: '+15017122661',
+    to: '+15558675310'
+  })
   .then(message => console.log(message.sid));

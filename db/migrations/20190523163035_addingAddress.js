@@ -9,7 +9,9 @@ exports.up = function(knex, Promise) {
         .unsigned();
       table.text('phone');
       table.text('email');
-      table.text('food_ordered'), table.time('created_at'), table.text('date');
+      table.text('food_ordered');
+      table.time('created_at');
+      table.text('date');
     })
   ]);
 };
