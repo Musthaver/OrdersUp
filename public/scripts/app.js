@@ -1,5 +1,6 @@
 const url = '/';
 const urlCart = '/cart';
+const urlQuantity = '/cart/quantity'
 const urlOrder = '/order';
 
 const request = (options, cb) => {
@@ -53,6 +54,10 @@ const round = number => {
   return Math.round(number * 100) / 100
 }
 
+const putItemsInCart = foodObj => {
+  
+}
+
 const displayCart = function(foodObj, items) {
   const $article = $('<article>')
     .attr('id', foodObj.id);
@@ -63,7 +68,7 @@ const displayCart = function(foodObj, items) {
     .on('click', function(event) {
       event.preventDefault();
       $.ajax({
-        url: '/cart/quantity',
+        url: urlQuantity,
         method: 'POST'
       }).done(function() {
         const cart = JSON.parse(({ ...localStorage }.cart)); 
@@ -94,7 +99,7 @@ const displayCart = function(foodObj, items) {
     .on('click', function(event) {
       event.preventDefault();
       $.ajax({
-        url: '/cart/quantity',
+        url: urlQuantity,
         method: 'POST'
       }).done(function() {
         const cart = JSON.parse(({ ...localStorage }.cart)); 
@@ -129,14 +134,13 @@ const displayCart = function(foodObj, items) {
     .on('click', function(event) {
       event.preventDefault();
       $.ajax({
-        url: '/cart',
+        url: urlCart,
         method: 'DELETE'
       }).done(function() {
         const clear = { ...localStorage };
         const clearReal = JSON.parse(clear.cart);
         let cleared = clearReal.filter(obj => obj.name !== foodObj.name);
         localStorage.setItem('cart', JSON.stringify(cleared));
-        foodArray = [clearReal];
         $('#cartitems').empty();
         let subtotal = round(calculateTotal(JSON.parse({ ...localStorage }.cart)));
         $('.subtotal').text('Subtotal: $' + subtotal);
@@ -157,6 +161,10 @@ const displayCart = function(foodObj, items) {
   $('#cartitems').append($article);
   return $('#cartitems');
 };
+
+const deleteItem = (event, foodObj) => {
+
+}
 
 
 const addItemToStorage = foodObj => {
@@ -193,7 +201,7 @@ $(function() {
     const foodID = $(this).attr('class');
     $.ajax({
       method: 'POST',
-      url: '/cart',
+      url: urlCart,
       data: foodID
     })
       .done(response => {
@@ -233,7 +241,7 @@ $(function() {
 
     $.ajax({
       method: 'POST',
-      url: '/order',
+      url: urlOrder,
       data: {
         name: $name,
         phone: $phone,
