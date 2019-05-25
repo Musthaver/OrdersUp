@@ -14,7 +14,9 @@ const request = (options, cb) => {
 const calculateTotal = cartArray => {
   const priceArray = [];
   for (const keyID of cartArray) {
-    priceArray.push(Number(keyID.price));
+    let quantity = keyID.quantity;
+    let price = keyID.price;
+    priceArray.push(Number(quantity) * Number(price));
   }
   if (priceArray.length === 0) {
     return 0;
@@ -81,12 +83,9 @@ const addItemToStorage = foodObj => {
     localStorage.setItem('cart', JSON.stringify(foodArray));
   } else {    
     const cart2 = JSON.parse(({...localStorage}.cart));  
-    console.log(cart2);
       for (var i = 0; i < cart2.length; i++) {
-        console.log(cart2[i].name, foodObj.name);
         if (cart2[i].name === foodObj.name) {
           cart2[i].quantity = (cart2[i].quantity + 1);
-          console.log(cart2);
           return localStorage.setItem('cart', JSON.stringify(cart2));
         }  
       } 
