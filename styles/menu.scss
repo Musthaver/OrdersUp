@@ -1,0 +1,31 @@
+#menu {
+  top: 80px;
+  width: 100%;
+  background-color: white;
+  position: fixed;
+  z-index: 10;
+  li {
+    padding: 0.5em 3em;
+    font-family: 'Acme', sans-serif;
+    font-size: 22px;
+    a {
+      text-decoration: none;
+    }
+  }
+}
+
+.fa-minus-circle {
+  font-size: 0.9em;
+  color: #573d7c !important;
+  padding-left: 8px;
+}
+
+.fa-plus-circle {
+  font-size: 0.9em;
+  color: #573d7c !important;
+  padding-right: 8px;
+}
+
+.fa-times-circle {
+  color: #573d7c !important;
+}
