@@ -60,16 +60,11 @@ const deleteItem = (event, foodObj) => {
         url: urlCart,
         method: 'DELETE'
       }).done(function() {
-        const clear = { ...localStorage };
-        const clearReal = JSON.parse(clear.cart);
-        let cleared = clearReal.filter(obj => obj.name !== foodObj.name);
+        const cart = JSON.parse(({ ...localStorage }.cart))
+        let cleared = cart.filter(obj => obj.name !== foodObj.name);
         localStorage.setItem('cart', JSON.stringify(cleared));
+        doTheMath(cart);
         $('#cartitems').empty();
-        let subtotal = round(calculateTotal(JSON.parse({ ...localStorage }.cart)));
-        $('.subtotal').text('Subtotal: $' + subtotal);
-        let taxes = round(calculateTaxes(calculateTotal(JSON.parse({ ...localStorage }.cart))));
-        $('.taxes').text('Taxes: $' + taxes);
-        $('.total').text('Total: $' + round((subtotal+taxes)) )
         renderFoods(cleared);
       });
       return;
@@ -204,15 +199,10 @@ $(function() {
     })
       .done(response => {
         addItemToStorage(response[0]);
-        let subtotal = round(calculateTotal(JSON.parse({...localStorage}.cart)));
-        $('.subtotal').text('Subtotal: $' + subtotal);
-        let taxes = round(calculateTaxes(calculateTotal(JSON.parse({ ...localStorage }.cart))));
-        $('.taxes').text('Taxes: $' + taxes);
-        $('.total').text('Total: $' + round((subtotal+taxes)) )
-        let items = { ...localStorage };
+        const cart = (JSON.parse({...localStorage}.cart));
+        doTheMath(cart);
         $('#cartitems').empty();
-        items = JSON.parse(items.cart);
-        renderFoods(items);
+        renderFoods(cart);
       })
       .fail(error => {
         console.log(`Error: ${error}`);
