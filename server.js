@@ -22,14 +22,7 @@ const usersRoutes = require('./routes/users');
 const http = require('http');
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
-app.post('/sms', (req, res) => {
-  const twiml = new MessagingResponse();
 
-  twiml.message('The Robots are coming! Head for the hills!');
-
-  res.writeHead(200, {'Content-Type': 'text/xml'});
-  res.end(twiml.toString());
-});
 
 http.createServer(app).listen(1337, () => {
   console.log('Express server listening on port 1337');
@@ -110,17 +103,50 @@ app.delete('/cart', (req, res) => {
   res.end();
 });
 
+let phoneNumber;
+
 app.post('/order', (req, res) => {
+  phoneNumber = req.body.phone
+let order = ''
+  for (let orderObj of req.body.cartItems){
+       order += `${orderObj.name} `
+  }
   client.messages
-  // .create({
-  //    body: 'Hello ' + req.body.name + ', we have advised the restaurant of your order and we will advise you of the estimated pick-up time.',
-  //    from: '+14387963966',
-  //    to: '+' + req.body.phone
-  //  })
-  // .then(message => console.log(message.sid));
+  .create({
+     body: 'Hello ' + req.body.name + ', we have advised the restaurant of your order and we will advise you of the estimated pick-up time.',
+     from: '+14387963088',
+     to: '+' + req.body.phone
+   })
+  .then(message => console.log(message.sid));
+  client.messages
+  .create({
+     body: 'Hello ' + req.body.name + ' send a new order of ' + order,
+     from: '+14387963088',
+     to: '+15148059285'
+   })
+  .then(message => console.log(message.sid));
   res.end()
+});
+
+app.post('/sms', (req, res) => {
+  let response = (req.body.Body)
+  const twiml = new MessagingResponse();
+
+  
+  twiml.message(response);
+  res.writeHead(200, {'Content-Type': 'text/xml'});
+  res.end(twiml.toString());
 });
 
 app.listen(PORT, () => {
   console.log('Example app listening on port ' + PORT);
 });
+
+
+client.messages
+  .create({
+     body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
+     from: '+15017122661',
+     to: '+15558675310'
+   })
+  .then(message => console.log(message.sid));
