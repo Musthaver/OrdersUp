@@ -32,6 +32,9 @@ const round = number => {
 
 const displayCart = function(foodObj, items) {
   const $article = $('<article>');
+  const $quantity = $('<div>')
+    .addClass('quantity')
+    .text(foodObj.quantity);
   const $foodName = $('<div>')
     .addClass('foodName')
     .text(foodObj.name);
@@ -60,7 +63,8 @@ const displayCart = function(foodObj, items) {
         renderFoods(cleared);
       });
     });
-
+  
+  $article.append($quantity);
   $article.append($foodName);
   $article.append($price);
   $article.append($delete);
