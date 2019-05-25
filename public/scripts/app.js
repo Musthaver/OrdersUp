@@ -16,7 +16,12 @@ const calculateTotal = cartArray => {
   for (const keyID of cartArray) {
     priceArray.push(Number(keyID.price));
   }
-  return priceArray.reduce((a, b) => a + b);
+  console.log(priceArray)
+  if (priceArray.length === 0) {
+    return 0;
+  } else {
+    return priceArray.reduce((a, b) => a + b);
+  }
 };
 
 const displayCart = function(foodObj, items) {
@@ -37,10 +42,13 @@ const displayCart = function(foodObj, items) {
       }).done(function() {
         const clear = { ...localStorage };
         const clearReal = JSON.parse(clear.cart);
-        localStorage.setItem('cart', clearReal.filter(obj => obj.name !== foodObj.name))
-        foodArray = [clear.cart];
-        console.log(clearReal)
-        // renderFoods(JSON.parse({...localStorage}.cart));
+        let cleared = clearReal.filter(obj => obj.name !== foodObj.name);
+        localStorage.setItem('cart', JSON.stringify(cleared));
+        foodArray = [clearReal];
+        $('#cartitems').empty();
+        let subtotal = calculateTotal(JSON.parse({ ...localStorage }.cart));
+        $('.subtotal').text('Subtotal: $' + subtotal);
+        renderFoods(cleared);
       });
     });
 
@@ -82,8 +90,8 @@ $(function() {
       .done(response => {
         console.log(response[0]);
         addItemToStorage(response[0]);
-        let subtotal = calculateTotal(JSON.parse({...localStorage}.cart)
-        $('.subtotal').text('Subtotal: $' + subtotal));
+        let subtotal = calculateTotal(JSON.parse({ ...localStorage }.cart));
+        $('.subtotal').text('Subtotal: $' + subtotal);
         let items = { ...localStorage };
         $('#cartitems').empty();
         items = JSON.parse(items.cart);
