@@ -60,19 +60,22 @@ const deleteItem = (event, foodObj) => {
         url: urlCart,
         method: 'DELETE'
       }).done(function() {
-        const clear = { ...localStorage };
-        const clearReal = JSON.parse(clear.cart);
-        let cleared = clearReal.filter(obj => obj.name !== foodObj.name);
+        const cart = JSON.parse(({ ...localStorage }.cart))
+        let cleared = cart.filter(obj => obj.name !== foodObj.name);
         localStorage.setItem('cart', JSON.stringify(cleared));
+        doTheMath(cart);
         $('#cartitems').empty();
-        let subtotal = round(calculateTotal(JSON.parse({ ...localStorage }.cart)));
-        $('.subtotal').text('Subtotal: $' + subtotal);
-        let taxes = round(calculateTaxes(calculateTotal(JSON.parse({ ...localStorage }.cart))));
-        $('.taxes').text('Taxes: $' + taxes);
-        $('.total').text('Total: $' + round((subtotal+taxes)) )
         renderFoods(cleared);
       });
       return;
+}
+
+const doTheMath = function(cart) {
+  let subtotal = round(calculateTotal(cart));
+  let taxes = round(calculateTaxes(calculateTotal(cart)));
+  $('.subtotal').text('Subtotal: $' + subtotal.toFixed(2));
+  $('.taxes').text('Taxes: $' + taxes.toFixed(2));
+  $('.total').text('Total: $' + round((subtotal+taxes)).toFixed(2))
 }
 
 const removeToQuantity = (event, foodObj) => {
@@ -81,26 +84,20 @@ const removeToQuantity = (event, foodObj) => {
     url: urlQuantity,
     method: 'POST'
   }).done(function() {
-    const cart = JSON.parse(({ ...localStorage }.cart)); 
-    console.log(cart);
+    const cart = JSON.parse(({ ...localStorage }.cart));
     for (var i = 0; i < cart.length; i++) {
-      console.log(cart[i].id, foodObj.id);
       if (cart[i].id === foodObj.id) {
         cart[i].quantity = (cart[i].quantity - 1);
         localStorage.setItem('cart', JSON.stringify(cart));
       }
     } 
-    let subtotal = round(calculateTotal(JSON.parse({ ...localStorage }.cart)));
-    $('.subtotal').text('Subtotal: $' + subtotal);
-    let taxes = round(calculateTaxes(calculateTotal(JSON.parse({ ...localStorage }.cart))));
-    $('.taxes').text('Taxes: $' + taxes);
-    $('.total').text('Total: $' + round((subtotal+taxes)))
-    let items = { ...localStorage };
+    doTheMath(cart);
     $('#cartitems').empty();
-    items = JSON.parse(items.cart);
-    renderFoods(items);
+    renderFoods(cart);
   });
 }
+
+
 
 const addToQuantity = (event, foodObj) => {
   event.preventDefault();
@@ -115,15 +112,9 @@ const addToQuantity = (event, foodObj) => {
         localStorage.setItem('cart', JSON.stringify(cart));
       }
     } 
-    let subtotal = round(calculateTotal(JSON.parse({ ...localStorage }.cart)));
-    $('.subtotal').text('Subtotal: $' + subtotal);
-    let taxes = (calculateTaxes(calculateTotal(JSON.parse({ ...localStorage }.cart))));
-    $('.taxes').text('Taxes: $' + taxes);
-    $('.total').text('Total: $' + round((subtotal+taxes)))
-    let items = { ...localStorage };
+    doTheMath(cart);
     $('#cartitems').empty();
-    items = JSON.parse(items.cart);
-    renderFoods(items);
+    renderFoods(cart);
   });
 
 }
@@ -144,7 +135,11 @@ const displayCart = function(foodObj, items) {
   const $remove = $('<i>')
     .addClass('fas fa-minus-circle') 
     .on('click', function(event) {
+      if (foodObj.quantity > 1) {
        removeToQuantity(event, foodObj)
+      } else {
+        deleteItem(event, foodObj)
+      }
     });
   const $foodName = $('<div>')
     .addClass('foodName')
@@ -207,15 +202,10 @@ $(function() {
     })
       .done(response => {
         addItemToStorage(response[0]);
-        let subtotal = round(calculateTotal(JSON.parse({...localStorage}.cart)));
-        $('.subtotal').text('Subtotal: $' + subtotal);
-        let taxes = round(calculateTaxes(calculateTotal(JSON.parse({ ...localStorage }.cart))));
-        $('.taxes').text('Taxes: $' + taxes);
-        $('.total').text('Total: $' + round((subtotal+taxes)) )
-        let items = { ...localStorage };
+        const cart = (JSON.parse({...localStorage}.cart));
+        doTheMath(cart);
         $('#cartitems').empty();
-        items = JSON.parse(items.cart);
-        renderFoods(items);
+        renderFoods(cart);
       })
       .fail(error => {
         console.log(`Error: ${error}`);
@@ -256,6 +246,19 @@ $(function() {
         $('#cartitems').empty();
         $('#cart').text(`Thank you for your order! Ordered at ${$time} on ${$date}`);
         localStorage.clear();
+        // setTimeout(() => {
+        //   $ajax({
+        //     method: 'GET',
+        //     url: ('/order/' + $id + '/message')
+        //   })
+        //   .done((message)=> if(message) {
+        //     $('#cart').text('Your order will be ready in ' + message)
+        //   })
+        //   .fail(error => {
+        //     console.log(`Order Post Error: ${error}`);
+        //   })
+        // }, 5000);
+
       })
       .fail(error => {
         console.log(`Order Post Error: ${error}`);
@@ -264,4 +267,5 @@ $(function() {
         console.log('Order Post completed.');
       });
   });
+
 });
