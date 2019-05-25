@@ -63,11 +63,6 @@ const displayCart = function(foodObj, items) {
         $('#cartitems').empty();
         items = JSON.parse(items.cart);
         renderFoods(items);
-      
-        //     return localStorage.setItem('cart', JSON.stringify(cart2));
-        // const addQuantity = $('#' + foodObj.id).find('.quantity').text();
-        // const newQuantity = (Number(addQuantity) + 1)
-        // $('.amount').find('.quantity').text(newQuantity);
       });
     });
   const $quantity = $('<span>')
@@ -81,12 +76,25 @@ const displayCart = function(foodObj, items) {
         url: '/cart/quantity',
         method: 'POST'
       }).done(function() {
-        const cart = JSON.parse({ ...localStorage }.cart);
-        const removeQuantity = $('#' + foodObj.id).find('.quantity').text();
-        const foodName = $('.foodName').text();
+        const cart = JSON.parse(({ ...localStorage }.cart)); 
+        console.log(cart);
+        for (var i = 0; i < cart.length; i++) {
+          console.log(cart[i].id, foodObj.id);
+          if (cart[i].id === foodObj.id) {
+            cart[i].quantity = (cart[i].quantity - 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+          }
+        } 
+        let subtotal = round(calculateTotal(JSON.parse({ ...localStorage }.cart)));
+        $('.subtotal').text('Subtotal: $' + subtotal);
+        let taxes = round(calculateTaxes(calculateTotal(JSON.parse({ ...localStorage }.cart))));
+        $('.taxes').text('Taxes: $' + taxes);
+        $('.total').text('Total: $' + round((subtotal+taxes)))
+        let items = { ...localStorage };
+        $('#cartitems').empty();
+        items = JSON.parse(items.cart);
+        renderFoods(items);
         //need condition if === 0
-        const newQuantity = (Number(removeQuantity) - 1);
-        $('.amount').find('.quantity').text(newQuantity);
       });
     });
   const $foodName = $('<div>')
