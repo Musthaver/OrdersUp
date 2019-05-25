@@ -1,18 +1,52 @@
 #cart {
-    background-color: white;
-    div#cartitems {
-        article{
-            fa-times-circle {
-                size: 1000px
-        }
-    }
-    div#total {
+display: flex;
+flex-direction: column;
+background-color: white;
+padding: 10px;
+height: 100vh;
+  #cartitems {
 
+    article {
+        display: flex;
+        justify-content: space-between;
+        line-height: 2;
+      div.amount {
+          span.quantity {
+              width: 10px;
+          }
+      }
+      div.foodName {
+      }
+      div.price {
+      }
+      i.fasFaMinusCircle {
+      }
     }
-    form {
-        bottom: 10px;
+  }
+  #total {
+    border-top: 1px solid grey;
+    padding-top: 20px;
+    position: absolute;
+    bottom: 250px;
+    line-height: 0.5;
+    p.subtotal {
     }
-
+    p.taxes {
     }
+    p.total {
+    }
+  }
+  form.placeOrder {
+      position: absolute;
+      bottom: 150px;
+    input[name="name"] {
+        margin-bottom: 3px;
+    }
+    input[name="phone"] {
+        margin-bottom: 3px;
+    }
+    button {
+        display: center; 
+    }
+  }
 }
-
