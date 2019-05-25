@@ -22,7 +22,6 @@ const usersRoutes = require('./routes/users');
 
 //TWilio
 const http = require('http');
-const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
 http.createServer(app).listen(1337, () => {
   console.log('Express server listening on port 1337');
@@ -186,23 +185,6 @@ app.listen(PORT, () => {
   console.log('Example app listening on port ' + PORT);
 });
 
-// app.post('/sms', (req, res) => {
-//   let response = req.body.Body;
-//   const twiml = new MessagingResponse();
-//   twiml.to = '+15149095071'
-//   // `+${phoneNumber}`
-  
-//   twiml.message(`Hello ${clientName}, your order will be ready in ${response}`);
-
-//   res.writeHead(200, {'Content-Type': 'text/xml'});
-//   res.end(twiml.toString());
-// });
-
-
-
-
-// .to(`+${phoneNumber}`)
-
 
 app.post('/sms', (req, res) => {
   let response = req.body.Body;
@@ -213,6 +195,25 @@ app.post('/sms', (req, res) => {
      to: `+${phoneNumber}`
    })
   .then(message => console.log(message.sid));
+
   res.writeHead(200, {'Content-Type': 'text/xml'});
   res.end(twiml.toString());
 });
+
+
+//   $.ajax({
+//     url: '/cart/quantity',
+//     method: 'GET'
+//   }).done(function() {
+//     $('#cartitems').text(`Your order will be there in ${response}`)
+//   });
+//   res.writeHead(200, {'Content-Type': 'text/xml'});
+//   res.end(twiml.toString());
+// });
+
+// app.get('/cart/quantity', (req, res) => {
+
+  
+//   $('#cartitems').text(`Your order will be there in 30 min`)
+
+// })
