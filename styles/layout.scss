@@ -9,7 +9,9 @@
 // main{
 //   width:calc(100% - 300px);
 // }
-
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   display:flex;
@@ -80,5 +82,6 @@ body {
     height: 100vh;
   }
 }
+
 
 

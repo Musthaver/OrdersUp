@@ -168,9 +168,6 @@ const displayCart = function(foodObj, items) {
   return $('#cartitems');
 };
 
-
-
-
 const addItemToStorage = foodObj => {
   if (!localStorage.cart) {
     let foodArray = [];
