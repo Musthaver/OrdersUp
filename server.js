@@ -118,14 +118,14 @@ let order = ''
   }
   client.messages
   .create({
-     body: 'Hello ' + req.body.name + ', we have advised the restaurant of your order and we will advise you of the estimated pick-up time.',
+     body: `Hello ${req.body.name}, we have advised the restaurant of your order and we will advise you of the estimated pick-up time.`,
      from: '+14387963088',
      to: '+' + req.body.phone
    })
   .then(message => console.log(message.sid));
   client.messages
   .create({
-     body: 'Hello ' + req.body.name + ' send a new order of ' + order,
+     body: `Hello, ${req.body.name} sent a new order of ${order} at ${req.body.time}`,
      from: '+14387963088',
      to: '+15148059285'
    })

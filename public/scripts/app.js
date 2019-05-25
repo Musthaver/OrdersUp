@@ -25,6 +25,28 @@ const calculateTotal = cartArray => {
   }
 };
 
+//create a date in form dd/mm/yyy
+const getCreateDate = () => {
+  const today = new Date()
+  const dd = today.getDate();
+  const mm = today.getMonth() + 1;
+  const yyyy = today.getFullYear();
+
+  return `${dd}/${mm}/${yyyy}`
+}
+
+//display the time in hours, minutes and seconds
+const getCreateTime = () => {
+  const today = new Date()
+  const hours = today.getHours();
+  const min = today.getMinutes();
+  const sec = today.getSeconds();
+
+  return `${hours} hours ${min} minutes and ${sec} seconds`
+}
+
+const generateRandomString = () => Math.random().toString(36).substring(7);
+
 const calculateTaxes = subtotal => {
   return subtotal*0.15
 }
@@ -206,6 +228,9 @@ $(function() {
       .find("input[name='phone']")
       .val();
     const $cartItems = JSON.parse(localStorage.cart);
+    const date = getCreateDate()
+    const time = getCreateTime()
+    const id = generateRandomString()
 
     $.ajax({
       method: 'POST',
@@ -213,12 +238,15 @@ $(function() {
       data: {
         name: $name,
         phone: $phone,
-        cartItems: $cartItems
+        cartItems: $cartItems.addClass,
+        date: date,
+        time: time,
+        id: id
       }
     })
       .done(response => {
         $('#cartitems').empty();
-        $('#cart').text('Thank you for your order');
+        $('#cart').text(`Thank you for your order! Ordered at ${time} on ${date}`);
         localStorage.clear();
       })
       .fail(error => {
