@@ -84,7 +84,7 @@ const removeToQuantity = (event, foodObj) => {
     url: urlQuantity,
     method: 'POST'
   }).done(function() {
-    const cart = JSON.parse(({ ...localStorage }.cart)); 
+    const cart = JSON.parse(({ ...localStorage }.cart));
     for (var i = 0; i < cart.length; i++) {
       if (cart[i].id === foodObj.id) {
         cart[i].quantity = (cart[i].quantity - 1);
@@ -135,7 +135,11 @@ const displayCart = function(foodObj, items) {
   const $remove = $('<i>')
     .addClass('fas fa-minus-circle') 
     .on('click', function(event) {
+      if (foodObj.quantity > 1) {
        removeToQuantity(event, foodObj)
+      } else {
+        deleteItem(event, foodObj)
+      }
     });
   const $foodName = $('<div>')
     .addClass('foodName')
