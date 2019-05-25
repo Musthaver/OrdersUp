@@ -157,14 +157,13 @@ const displayCart = function(foodObj, items) {
     .on('click', function(event) {
       deleteItem(event, foodObj)
     });
-  
+  $price.append($delete);
   $amount.append($add);
   $amount.append($quantity);
   $amount.append($remove);
   $article.append($amount);
   $article.append($foodName);
   $article.append($price);
-  $article.append($delete);
   $('#cartitems').append($article);
   return $('#cartitems');
 };
