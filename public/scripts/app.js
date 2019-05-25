@@ -75,6 +75,14 @@ const deleteItem = (event, foodObj) => {
       return;
 }
 
+const doTheMath = function(cart) {
+  let subtotal = round(calculateTotal(cart));
+  let taxes = round(calculateTaxes(calculateTotal(cart)));
+  $('.subtotal').text('Subtotal: $' + subtotal);
+  $('.taxes').text('Taxes: $' + taxes);
+  $('.total').text('Total: $' + round((subtotal+taxes)))
+}
+
 const removeToQuantity = (event, foodObj) => {
   event.preventDefault();
   $.ajax({
@@ -82,25 +90,19 @@ const removeToQuantity = (event, foodObj) => {
     method: 'POST'
   }).done(function() {
     const cart = JSON.parse(({ ...localStorage }.cart)); 
-    console.log(cart);
     for (var i = 0; i < cart.length; i++) {
-      console.log(cart[i].id, foodObj.id);
       if (cart[i].id === foodObj.id) {
         cart[i].quantity = (cart[i].quantity - 1);
         localStorage.setItem('cart', JSON.stringify(cart));
       }
     } 
-    let subtotal = round(calculateTotal(JSON.parse({ ...localStorage }.cart)));
-    $('.subtotal').text('Subtotal: $' + subtotal);
-    let taxes = round(calculateTaxes(calculateTotal(JSON.parse({ ...localStorage }.cart))));
-    $('.taxes').text('Taxes: $' + taxes);
-    $('.total').text('Total: $' + round((subtotal+taxes)))
-    let items = { ...localStorage };
+    doTheMath(cart);
     $('#cartitems').empty();
-    items = JSON.parse(items.cart);
-    renderFoods(items);
+    renderFoods(cart);
   });
 }
+
+
 
 const addToQuantity = (event, foodObj) => {
   event.preventDefault();
@@ -167,8 +169,6 @@ const displayCart = function(foodObj, items) {
   $('#cartitems').append($article);
   return $('#cartitems');
 };
-
-
 
 
 const addItemToStorage = foodObj => {
@@ -259,6 +259,9 @@ $(function() {
         $('#cartitems').empty();
         $('#cart').text(`Thank you for your order! Ordered at ${$time} on ${$date}`);
         localStorage.clear();
+      //   setTimeout(()=>{
+      //     ajax('/order/' + response.order_id+'/message').then((message)=> if() : 
+      //   }, 5000)
       })
       .fail(error => {
         console.log(`Order Post Error: ${error}`);
@@ -267,4 +270,5 @@ $(function() {
         console.log('Order Post completed.');
       });
   });
+
 });

@@ -185,6 +185,12 @@ app.listen(PORT, () => {
   console.log('Example app listening on port ' + PORT);
 });
 
+// app.get('/oder/:id/message',(req, res)=>{
+//   req.params.id
+//   knex find 
+//   res.send('good')
+// })
+
 
 app.post('/sms', (req, res) => {
   let response = req.body.Body;
