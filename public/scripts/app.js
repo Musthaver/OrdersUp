@@ -16,13 +16,19 @@ const calculateTotal = cartArray => {
   for (const keyID of cartArray) {
     priceArray.push(Number(keyID.price));
   }
-  console.log(priceArray)
   if (priceArray.length === 0) {
     return 0;
   } else {
     return priceArray.reduce((a, b) => a + b);
   }
 };
+
+const calculateTaxes = subtotal => {
+  return subtotal*0.15
+}
+const round = number => {
+  return Math.round(number * 100) / 100
+}
 
 const displayCart = function(foodObj, items) {
   const $article = $('<article>');
@@ -46,8 +52,11 @@ const displayCart = function(foodObj, items) {
         localStorage.setItem('cart', JSON.stringify(cleared));
         foodArray = [clearReal];
         $('#cartitems').empty();
-        let subtotal = calculateTotal(JSON.parse({ ...localStorage }.cart));
+        let subtotal = round(calculateTotal(JSON.parse({ ...localStorage }.cart)));
         $('.subtotal').text('Subtotal: $' + subtotal);
+        let taxes = round(calculateTaxes(calculateTotal(JSON.parse({ ...localStorage }.cart))));
+        $('.taxes').text('Taxes: $' + taxes);
+        $('.total').text('Total: $' + round((subtotal+taxes)) )
         renderFoods(cleared);
       });
     });
@@ -89,8 +98,12 @@ $(function() {
     })
       .done(response => {
         addItemToStorage(response[0]);
-        let subtotal = calculateTotal(JSON.parse({...localStorage}.cart));
+        let subtotal = round(calculateTotal(JSON.parse({...localStorage}.cart)));
         $('.subtotal').text('Subtotal: $' + subtotal);
+        let taxes = round(calculateTaxes(calculateTotal(JSON.parse({ ...localStorage }.cart))));
+        $('.taxes').text('Taxes: $' + taxes);
+        $('.total').text('Total: $' + round((subtotal+taxes)) )
+        console.log(subtotal)
         let items = { ...localStorage };
         $('#cartitems').empty();
         items = JSON.parse(items.cart);
@@ -103,6 +116,8 @@ $(function() {
         console.log('Request completed');
       });
   });
+
+     
 
   $('.placeOrder').on('submit', function(event) {
     event.preventDefault();
