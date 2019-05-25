@@ -73,6 +73,7 @@ const addItemToStorage = foodObj => {
   if (!localStorage.cart) {
     localStorage.setItem('cart', '');
   }
+  console.log(localStorage.cart);
   foodArray.push(foodObj);
   localStorage.setItem('cart', JSON.stringify(foodArray));
 };

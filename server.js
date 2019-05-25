@@ -78,7 +78,6 @@ app.get('/', (req, res) => {
     .leftOuterJoin('foods', 'foods.category_id', 'categories.id')
     .orderBy('categories.id')
     .then(results => {
-      console.log(results);
       const arrayOfCategories = [];
       for (const obj of results) {
         if (arrayOfCategories.includes(obj.category) === false) {
