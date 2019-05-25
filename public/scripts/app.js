@@ -1,5 +1,6 @@
 const url = '/';
 const urlCart = '/cart';
+const urlQuantity = '/cart/quantity'
 const urlOrder = '/order';
 
 const request = (options, cb) => {
@@ -25,11 +26,36 @@ const calculateTotal = cartArray => {
   }
 };
 
+//create a date in form dd/mm/yyy
+const getCreateDate = () => {
+  const today = new Date()
+  const dd = today.getDate();
+  const mm = today.getMonth() + 1;
+  const yyyy = today.getFullYear();
+
+  return `${dd}/${mm}/${yyyy}`
+}
+
+//display the time in hours, minutes and seconds
+const getCreateTime = () => {
+  const today = new Date()
+  const hours = today.getHours();
+  const min = today.getMinutes();
+
+  return `${hours}:${min}`
+}
+
+const generateRandomString = () => Math.random().toString(36).substring(7);
+
 const calculateTaxes = subtotal => {
   return subtotal*0.15
 }
 const round = number => {
   return Math.round(number * 100) / 100
+}
+
+const putItemsInCart = foodObj => {
+  
 }
 
 const displayCart = function(foodObj, items) {
@@ -42,7 +68,7 @@ const displayCart = function(foodObj, items) {
     .on('click', function(event) {
       event.preventDefault();
       $.ajax({
-        url: '/cart/quantity',
+        url: urlQuantity,
         method: 'POST'
       }).done(function() {
         const cart = JSON.parse(({ ...localStorage }.cart)); 
@@ -73,7 +99,7 @@ const displayCart = function(foodObj, items) {
     .on('click', function(event) {
       event.preventDefault();
       $.ajax({
-        url: '/cart/quantity',
+        url: urlQuantity,
         method: 'POST'
       }).done(function() {
         const cart = JSON.parse(({ ...localStorage }.cart)); 
@@ -108,14 +134,13 @@ const displayCart = function(foodObj, items) {
     .on('click', function(event) {
       event.preventDefault();
       $.ajax({
-        url: '/cart',
+        url: urlCart,
         method: 'DELETE'
       }).done(function() {
         const clear = { ...localStorage };
         const clearReal = JSON.parse(clear.cart);
         let cleared = clearReal.filter(obj => obj.name !== foodObj.name);
         localStorage.setItem('cart', JSON.stringify(cleared));
-        foodArray = [clearReal];
         $('#cartitems').empty();
         let subtotal = round(calculateTotal(JSON.parse({ ...localStorage }.cart)));
         $('.subtotal').text('Subtotal: $' + subtotal);
@@ -136,6 +161,10 @@ const displayCart = function(foodObj, items) {
   $('#cartitems').append($article);
   return $('#cartitems');
 };
+
+const deleteItem = (event, foodObj) => {
+
+}
 
 
 const addItemToStorage = foodObj => {
@@ -172,7 +201,7 @@ $(function() {
     const foodID = $(this).attr('class');
     $.ajax({
       method: 'POST',
-      url: '/cart',
+      url: urlCart,
       data: foodID
     })
       .done(response => {
@@ -206,19 +235,25 @@ $(function() {
       .find("input[name='phone']")
       .val();
     const $cartItems = JSON.parse(localStorage.cart);
+    const $date = getCreateDate()
+    const $time = getCreateTime()
+    const $id = generateRandomString()
 
     $.ajax({
       method: 'POST',
-      url: '/order',
+      url: urlOrder,
       data: {
         name: $name,
         phone: $phone,
-        cartItems: $cartItems
+        cartItems: $cartItems,
+        date: $date,
+        time: $time,
+        id: $id
       }
     })
       .done(response => {
         $('#cartitems').empty();
-        $('#cart').text('Thank you for your order');
+        $('#cart').text(`Thank you for your order! Ordered at ${$time} on ${$date}`);
         localStorage.clear();
       })
       .fail(error => {
