@@ -7,10 +7,10 @@ exports.up = function(knex, Promise) {
         .text('id')
         .primary()
         .unsigned();
+      table.text('name');
       table.text('phone');
-      table.text('email');
-      table.text('food_ordered');
-      table.time('created_at');
+      table.text('order');
+      table.text('time');
       table.text('date');
     })
   ]);

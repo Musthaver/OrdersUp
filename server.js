@@ -55,8 +55,71 @@ app.use(express.static('public'));
 app.use('/api/users', usersRoutes(knex));
 // app.use('/img', express.static(path.join(__dirname, 'public/img')));
 
-// Home page
-app.get('/', (req, res) => {
+const makeTheOrder = cartItems => {
+  let order = '';
+  for (let [i, orderObj] of cartItems.entries()) {
+    if (i === cartItems.length - 1) {
+      order += `${orderObj.name} x${orderObj.quantity}`;
+    } else {
+      order += `${orderObj.name} x${orderObj.quantity},  `;
+    }
+  }
+  return order;
+};
+
+const insertIntoDB = (id, name, phone, order, time, date) => {
+  knex('orders')
+    .insert({
+      id: id,
+      name: name,
+      phone: phone,
+      order: order,
+      time: time,
+      date: date
+    })
+    .then(results => {
+      console.log('worked');
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+};
+
+const sendSMSToRestaurant = (name, phone) => {
+  // client.messages
+  // .create({
+  //    body: `Hello ${name}, we have advised the restaurant of your order and we will advise you of the estimated pick-up time.`,
+  //    from: '+14387963088',
+  //  to: `+${phone}`
+  //  })
+  // .then(message => console.log(message.sid));
+};
+
+const sendSMSToClient = (name, order, time) => {
+  // client.messages
+  // .create({
+  //    body: `Hello, ${name} sent a new order of ${order} at ${time}. Please respond with an ETA for the order to be ready`,
+  //    from: '+14387963088',
+  //    to: '+15148059285'
+  //  })
+  // .then(message => console.log(message.sid));
+};
+
+const selectASingleFood = (foodID, res) => {
+  knex
+    .select()
+    .from('foods')
+    .where('foods.id', foodID)
+    .then(results => {
+      //result is an array with one object
+      res.send(results);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+};
+
+const displayHomePage = (res) => {
   knex
     .select(
       'categories.name as category',
@@ -70,32 +133,31 @@ app.get('/', (req, res) => {
     .leftOuterJoin('foods', 'foods.category_id', 'categories.id')
     .orderBy('categories.id')
     .then(results => {
-      const arrayOfCategories = [];
-      for (const obj of results) {
-        if (arrayOfCategories.includes(obj.category) === false) {
-          arrayOfCategories.push(obj.category);
-        }
-      }
+      let arrayOfCategories = matchCategories(results);
       res.render('index', { results, categories: arrayOfCategories });
     })
     .catch(function(err) {
       console.log(err);
     });
+};
+
+const matchCategories = results => {
+  const arrayOfCategories = [];
+  for (const obj of results) {
+    if (arrayOfCategories.includes(obj.category) === false) {
+      arrayOfCategories.push(obj.category);
+    }
+  }
+  return arrayOfCategories;
+};
+
+app.get('/', (req, res) => {
+  displayHomePage(res);
 });
 
 app.post('/cart', (req, res) => {
   const foodID = Object.keys(req.body)[0];
-  knex
-    .select()
-    .from('foods')
-    .where('foods.id', foodID)
-    .then(results => {
-      //result is an array with one object
-      res.send(results);
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
+  selectASingleFood(foodID, res);
 });
 
 app.post('/cart/quantity', (req, res) => {
@@ -109,30 +171,12 @@ app.delete('/cart', (req, res) => {
 let phoneNumber;
 
 app.post('/order', (req, res) => {
-  phoneNumber = req.body.phone;
-  console.log(req.body);
-  let order = '';
-  for (let [i, orderObj] of req.body.cartItems.entries()) {
-    if (i === req.body.cartItems.length - 1) {
-      order += `${orderObj.name} x${orderObj.quantity}`;
-    } else {
-      order += `${orderObj.name} x${orderObj.quantity},  `;
-    }
-  }
-  // client.messages
-  // .create({
-  //    body: `Hello ${req.body.name}, we have advised the restaurant of your order and we will advise you of the estimated pick-up time.`,
-  //    from: '+14387963088',
-  //  to: `+${phoneNumber}`
-  //  })
-  // .then(message => console.log(message.sid));
-  // client.messages
-  // .create({
-  //    body: `Hello, ${req.body.name} sent a new order of ${order} at ${req.body.time}. Please respond with an ETA for the order to be ready`,
-  //    from: '+14387963088',
-  //    to: '+15148059285'
-  //  })
-  // .then(message => console.log(message.sid));
+  const { name, phone, cartItems, date, time, id } = req.body;
+  phoneNumber = phone;
+  let order = makeTheOrder(cartItems);
+  insertIntoDB(id, name, phone, order, time, date);
+  sendSMSToRestaurant(name, phone);
+  sendSMSToClient(name, order, time);
   res.end();
 });
 
