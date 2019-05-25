@@ -177,16 +177,21 @@ app.post('/order', (req, res) => {
   clientName = name
   let order = makeTheOrder(cartItems);
   insertIntoDB(id, name, phone, order, time, date);
-  // sendSMSToClient(name);
+  sendSMSToClient(name);
   sendSMSToRestaurant(name, order, time);
   res.end();
 });
 
+app.listen(PORT, () => {
+  console.log('Example app listening on port ' + PORT);
+});
 
 // app.post('/sms', (req, res) => {
 //   let response = req.body.Body;
 //   const twiml = new MessagingResponse();
-
+//   twiml.to = '+15149095071'
+//   // `+${phoneNumber}`
+  
 //   twiml.message(`Hello ${clientName}, your order will be ready in ${response}`);
 
 //   res.writeHead(200, {'Content-Type': 'text/xml'});
@@ -195,23 +200,19 @@ app.post('/order', (req, res) => {
 
 
 
-app.listen(PORT, () => {
-  console.log('Example app listening on port ' + PORT);
-});
+
+// .to(`+${phoneNumber}`)
+
 
 app.post('/sms', (req, res) => {
   let response = req.body.Body;
-  const twiml = new MessagingResponse();
-  // twiml.to = "+15149095071"
-  // `+${phoneNumber}`
-  
-  twiml.message(`Hello ${clientName}, your order will be ready in ${response}`);
-
+  client.messages
+  .create({
+     body: `Hello ${clientName}, your order will be ready in ${response}`,
+     from: '+14387963088',
+     to: `+${phoneNumber}`
+   })
+  .then(message => console.log(message.sid));
   res.writeHead(200, {'Content-Type': 'text/xml'});
   res.end(twiml.toString());
 });
-
-
-
-
-// .to(`+${phoneNumber}`)
