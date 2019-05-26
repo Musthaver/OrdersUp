@@ -104,6 +104,34 @@ const doTheMath = function(cart) {
   $('.total').text('Total: $' + round(subtotal + taxes).toFixed(2));
 };
 
+const sendOrderReady = () => {
+  $('.sms').on('click', function(event) {
+    event.preventDefault();
+    const phoneNumber = $(this)
+      .parent()
+      .find('.phone')
+      .text()
+      .trim();
+    const orderID = $(this)
+      .parent()
+      .find('.id')
+      .text()
+      .trim();
+    console.log(orderID);
+    $.ajax({
+      method: 'POST',
+      url: '/past_orders/sms',
+      data: { phoneNumber: phoneNumber }
+    })
+      .done(response => {
+        $(`#sendsms${orderID}`).remove();
+        $(`#sentsms${orderID}`).text('Sent!');
+      })
+      .fail(err => console.log('Error', err));
+  });
+};
+
+
 const removeToQuantity = (event, foodObj) => {
   event.preventDefault();
   $.ajax({
@@ -179,6 +207,7 @@ const displayCart = function(foodObj, items) {
   $article.append($amount);
   $article.append($foodName);
   $article.append($price);
+
   $('#cartitems').append($article);
   return $('#cartitems');
 };
@@ -208,7 +237,6 @@ const renderFoods = itemsArray => {
     $('#cartitems').append(displayCart(foodObj, itemsArray));
   }
 };
-
 
 const placeOrder = () => {
   $('.placeOrder').on('submit', function(event) {
@@ -264,27 +292,19 @@ const placeOrder = () => {
   });
 };
 
+const displayEmptyCart = () => {
+  if (localStorage.length === 0) {
+    const $emptyCart = $('<i>').addClass("fas fa-pizza-slice");
+    $('#cartitems').append($emptyCart);
+  }
+};
 $(function() {
+  displayEmptyCart();
   $(this).scrollTop(0);
   addItemToCart();
   placeOrder();
+  sendOrderReady();
   // const cart = JSON.parse({ ...localStorage }.cart);
   // renderFoods(cart);
-
-  $('.sms').on('click', function(event) {
-    event.preventDefault();
-    const phoneNumber = ($(this).parent().find('.phone').text().trim());
-    const orderID = ($(this).parent().find('.id').text().trim());
-    console.log(orderID)
-    $.ajax({
-      method: 'POST',
-      url: '/past_orders/sms',
-      data: {phoneNumber: phoneNumber}
-    })
-    .done(response => {
-     $(`#sendsms${orderID}`).remove()
-     $(`#sentsms${orderID}`).text('Sent!')
-    })
-    .fail(err => console.log('Error', err))
-  });    
 });
+
