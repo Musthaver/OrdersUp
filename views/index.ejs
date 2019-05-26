@@ -53,8 +53,8 @@
           <img class="logo" src="/img/utensils.png" />
       </a> 
       </div>
-    <span class="header">Order's Up
-      <a href='/past_orders'></a>
+    <span class="header">
+      <a href='/past_orders' style="text-decoration:none";>Order's Up</a>
     </span> 
 
 
@@ -65,7 +65,7 @@
     <ul class="nav">
       <% for (const category of categories) { %>
       <li class="nav-item"> 
-        <a class="nav-link-<%=category%>" href="#anchor<%=category%>"
+        <a class="nav-link-<%=category%>" style="text-decoration:none"; color="inherit"; href="#anchor<%=category%>"
           ><%=category%></a
         >
       </li>

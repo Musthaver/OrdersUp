@@ -120,6 +120,7 @@ const displayOrderPage = res => {
   knex
   .select()
   .from('orders')
+  .orderBy('time')
   .then(results => {
     res.render('orders', { orders: results });
   })

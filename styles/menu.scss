@@ -1,7 +1,9 @@
 #menu {
+  
+
   top: 80px;
   width: 100%;
-  background-color: #F0F0F0;
+  background-color: #f0f0f0;
   position: fixed;
   z-index: 10;
   li {
@@ -26,4 +28,16 @@
 #anchorHamburgers\ \&\ Sandwiches {
   position: relative;
   bottom: 100px;
+}
+
+#menu {
+  a {
+    color: #212529;
+  }
+}
+
+.header {
+  a{
+    color: inherit;
+  }
 }

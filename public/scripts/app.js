@@ -12,6 +12,7 @@ const request = (options, cb) => {
     .always(() => console.log('Request completed.'));
 };
 
+//Calculate the subtotal of all the items in the cart
 const calculateTotal = cartArray => {
   const priceArray = [];
   for (const keyID of cartArray) {
@@ -26,6 +27,7 @@ const calculateTotal = cartArray => {
   }
 };
 
+//Create a date to log when order was placed
 const getCreateDate = () => {
   const today = new Date();
   const dd = today.getDate();
@@ -35,6 +37,7 @@ const getCreateDate = () => {
   return `${dd}/${mm}/${yyyy}`;
 };
 
+//Create time to log when order was placed
 const getCreateTime = () => {
   const today = new Date();
   const hours = today.getHours();
@@ -43,6 +46,7 @@ const getCreateTime = () => {
   return `${hours}:${min}`;
 };
 
+//Add item from main page to the cart
 const addItemToCart = () => {
   $('main article').on('click', function(event) {
     event.preventDefault();
@@ -68,18 +72,23 @@ const addItemToCart = () => {
   });
 };
 
+//Generate random string for the OrderID
 const generateRandomString = () =>
   Math.random()
     .toString(36)
     .substring(7);
 
+//calculate taxes    
 const calculateTaxes = subtotal => {
   return round(subtotal * 0.15);
 };
+
+//rounding function to round the total to two decimals
 const round = number => {
   return Math.round(number * 100) / 100;
 };
 
+//Delete an item from the cart
 const deleteItem = (event, foodObj) => {
   event.preventDefault();
   $.ajax({
@@ -96,6 +105,7 @@ const deleteItem = (event, foodObj) => {
   return;
 };
 
+//Add subtotal, taxes and total to the cart
 const doTheMath = function(cart) {
   let subtotal = round(calculateTotal(cart));
   let taxes = round(calculateTaxes(calculateTotal(cart)));
@@ -104,6 +114,34 @@ const doTheMath = function(cart) {
   $('.total').text('Total: $' + round(subtotal + taxes).toFixed(2));
 };
 
+//Send SMS to the client from past orders page to confirm order is ready
+const sendOrderReady = () => {
+  $('.sms').on('click', function(event) {
+    event.preventDefault();
+    const phoneNumber = $(this)
+      .parent()
+      .find('.phone')
+      .text()
+      .trim();
+    const orderID = $(this)
+      .parent()
+      .find('.id')
+      .text()
+      .trim();
+    $.ajax({
+      method: 'POST',
+      url: '/past_orders/sms',
+      data: { phoneNumber: phoneNumber }
+    })
+      .done(response => {
+        $(`#sendsms${orderID}`).remove();
+        $(`#sentsms${orderID}`).text('Sent!');
+      })
+      .fail(err => console.log('Error', err));
+  });
+};
+
+//Reduce quantity of an item in the cart by 1
 const removeToQuantity = (event, foodObj) => {
   event.preventDefault();
   $.ajax({
@@ -122,6 +160,8 @@ const removeToQuantity = (event, foodObj) => {
     }
   });
 };
+
+//Increase the quantity of an item in the cart by 1
 const addToQuantity = (event, foodObj) => {
   event.preventDefault();
   $.ajax({
@@ -141,6 +181,7 @@ const addToQuantity = (event, foodObj) => {
   });
 };
 
+//Jquery building one cart item
 const displayCart = function(foodObj, items) {
   const $article = $('<article>').attr('id', foodObj.id);
   const $amount = $('<div>').addClass('amount');
@@ -179,10 +220,12 @@ const displayCart = function(foodObj, items) {
   $article.append($amount);
   $article.append($foodName);
   $article.append($price);
+
   $('#cartitems').append($article);
   return $('#cartitems');
 };
 
+//Add an item to localstorage / manage quantity Key/value
 const addItemToStorage = foodObj => {
   if (!localStorage.cart) {
     let foodArray = [];
@@ -203,12 +246,14 @@ const addItemToStorage = foodObj => {
   }
 };
 
+//append each object to cart
 const renderFoods = itemsArray => {
   for (const foodObj of itemsArray) {
     $('#cartitems').append(displayCart(foodObj, itemsArray));
   }
 };
 
+//Upon submit ajax request and clear cart
 const placeOrder = () => {
   $('.placeOrder').on('submit', function(event) {
     event.preventDefault();
@@ -241,18 +286,6 @@ const placeOrder = () => {
           `Thank you for your order! Ordered at ${$time} on ${$date}`
         );
         localStorage.clear();
-        // setTimeout(() => {
-        //   $ajax({
-        //     method: 'GET',
-        //     url: ('/order/' + $id + '/message')
-        //   })
-        //   .done((message)=> if(message) {
-        //     $('#cart').text('Your order will be ready in ' + message)
-        //   })
-        //   .fail(error => {
-        //     console.log(`Order Post Error: ${error}`);
-        //   })
-        // }, 5000);
       })
       .fail(error => {
         console.log(`Order Post Error: ${error}`);
@@ -263,8 +296,24 @@ const placeOrder = () => {
   });
 };
 
+//If cart empty, show a pizza!
+const displayEmptyCart = () => {
+  if (localStorage.length === 0) {
+    const $emptyCart = $('<i>').addClass("fas fa-pizza-slice");
+    $('#cartitems').append($emptyCart);
+  }
+};
+
+//On load call function and load localstorage cart if it exists
 $(function() {
+  displayEmptyCart();
   $(this).scrollTop(0);
   addItemToCart();
   placeOrder();
+  sendOrderReady();
+  if (localStorage.cart) {
+  const cart = JSON.parse({ ...localStorage }.cart);
+  renderFoods(cart);
+  }
 });
+

@@ -19,9 +19,14 @@
       integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay"
       crossorigin="anonymous"
     />
-    <link href="https://fonts.googleapis.com/css?family=Acme&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
-    
+    <link
+      href="https://fonts.googleapis.com/css?family=Acme&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- App CSS -->
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
@@ -49,20 +54,46 @@
   </nav>
 
   <body>
-        <h2>Orders</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Order #</th>
-              <th>Customer name</th>
-              <th>Telephone</th>
-              <th>Order</th>
-              <th>time</th>
-              <th>date</th>
-            </tr>
-          </thead>
-          <tbody>
-        </tbody>
-        </table>
+    <h2>Orders</h2>
+    <table>
+      <thead>
+        <tr>
+          <th class='id'>Order#</th>
+          <th class='name'>Customer name</th>
+          <th class='phone'>Telephone</th>
+          <th class='order'>Order</th>
+          <th class='time'>Time</th>
+          <th class='date'>Date</th>
+          <th class='sms'>Confirm Complete</th>
+        </tr>
+      </thead>
+      <tbody>
+            <% for (const orderID of orders) { %>
+          <tr id="<%= orderID.id%>">
+        <td class='id'>
+          <%= orderID.id%>
+        </td>
+        <td class='name'>
+          <%= orderID.name%>
+        </td>
+        <td class='phone'>
+          <%= orderID.phone%>
+        </td>
+        <td class='order'>
+          <%= orderID.order%>
+        </td>
+        <td class='time'>
+          <%= orderID.time%>
+        </td>
+        <td class='date'>
+          <%= orderID.date%>
+        </td>
+        <td class='sms'>
+          <div id="sentsms<%= orderID.id%>"><button id="sendsms<%= orderID.id%>">Send SMS</button></div>
+        </td>
+    </tr>
+        <% } %>
+      </tbody>
+    </table>
   </body>
 </html>
