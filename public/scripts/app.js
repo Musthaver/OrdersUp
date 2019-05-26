@@ -267,6 +267,4 @@ $(function() {
   $(this).scrollTop(0);
   addItemToCart();
   placeOrder();
-  const cart = JSON.parse({ ...localStorage }.cart);
-  renderFoods(cart);
 });
