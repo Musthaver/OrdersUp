@@ -34,7 +34,7 @@ body {
       h4 {
         margin: 0.5em;
         padding-bottom: 0.3em;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #c3bfbf;
       }
 
       .food-cards {
@@ -46,8 +46,9 @@ body {
         article {
           margin: 5px;
           width: 16rem;
-          border: solid 1px #eee;
+          border: solid 1px #c3bfbf;
           border-radius: 5px;
+          background-color: white;
 
           div.card-body { 
             padding: 0.8em;
@@ -84,7 +85,6 @@ body {
     height: 100vh;
   }
 }
-
 
 #Appetizers {
   border-radius: 15px;

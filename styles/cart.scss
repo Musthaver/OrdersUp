@@ -9,7 +9,7 @@ border-radius: 15px;
 
     header {
     line-height: 0.7em;
-    border-bottom: 1px solid grey;
+    border-bottom: 1px solid #c3bfbf;
         h3 {
             text-align: center;
         }
@@ -30,12 +30,13 @@ border-radius: 15px;
       }
       div.price {
       }
-      i.fasFaMinusCircle {
+      i.fas.fa-times-circle {
+          padding-left: 3px;
       }
     }
   }
   #total {
-    border-top: 1px solid grey;
+    border-top: 1px solid #c3bfbf;
     padding-top: 20px;
     position: absolute;
     bottom: 250px;
