@@ -117,7 +117,6 @@ const sendOrderReady = () => {
       .find('.id')
       .text()
       .trim();
-    console.log(orderID);
     $.ajax({
       method: 'POST',
       url: '/past_orders/sms',
@@ -270,18 +269,6 @@ const placeOrder = () => {
           `Thank you for your order! Ordered at ${$time} on ${$date}`
         );
         localStorage.clear();
-        // setTimeout(() => {
-        //   $ajax({
-        //     method: 'GET',
-        //     url: ('/order/' + $id + '/message')
-        //   })
-        //   .done((message)=> if(message) {
-        //     $('#cart').text('Your order will be ready in ' + message)
-        //   })
-        //   .fail(error => {
-        //     console.log(`Order Post Error: ${error}`);
-        //   })
-        // }, 5000);
       })
       .fail(error => {
         console.log(`Order Post Error: ${error}`);
