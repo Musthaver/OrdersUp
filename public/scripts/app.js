@@ -135,7 +135,7 @@ const sendOrderReady = () => {
     })
       .done(response => {
         $(`#sendsms${orderID}`).remove();
-        $(`#sendsms${orderID}`).text('Sent &#9993');
+        $(`#sentsms${orderID}`).text('Sent &#9993');
       })
       .fail(err => console.log('Error', err));
   });

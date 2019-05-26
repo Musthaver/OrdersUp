@@ -94,7 +94,7 @@
         <% if (!orderID.SMSsent) { %>
           <div id="sendsms<%= orderID.id%>"><button id="sendsms<%= orderID.id%>">Send SMS</button></div>
          <% } else { %>
-          <div>Sent &#9993 </div>
+          <div id="sentsms<%= orderID.id%>">Sent &#9993 </div>
           <% } %>
 
         </td>
