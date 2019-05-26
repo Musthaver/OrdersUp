@@ -12,7 +12,6 @@ exports.up = function(knex, Promise) {
       table.text('order');
       table.text('time');
       table.text('date');
-      table.text('message');
     })
   ]);
 };
