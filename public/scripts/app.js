@@ -68,7 +68,6 @@ const addItemToCart = () => {
   });
 };
 
-
 const generateRandomString = () =>
   Math.random()
     .toString(36)
@@ -98,11 +97,13 @@ const deleteItem = (event, foodObj) => {
 };
 
 const doTheMath = function(cart) {
+ 
   let subtotal = round(calculateTotal(cart));
   let taxes = round(calculateTaxes(calculateTotal(cart)));
   $('.subtotal').text('Subtotal: $' + subtotal.toFixed(2));
   $('.taxes').text('Taxes: $' + taxes.toFixed(2));
   $('.total').text('Total: $' + round(subtotal + taxes).toFixed(2));
+  
 };
 
 const removeToQuantity = (event, foodObj) => {
@@ -117,7 +118,6 @@ const removeToQuantity = (event, foodObj) => {
         cart[i].quantity = cart[i].quantity - 1;
         localStorage.setItem('cart', JSON.stringify(cart));
       }
-    }
     doTheMath(cart);
     $('#cartitems').empty();
     renderFoods(cart);
@@ -147,7 +147,7 @@ const displayCart = function(foodObj, items) {
   const $article = $('<article>').attr('id', foodObj.id);
   const $amount = $('<div>').addClass('amount');
   const $add = $('<i>')
-    .addClass('fas fa-plus-circle')
+    .addClass('fa fa-arrow-right')
     .on('click', function(event) {
       addToQuantity(event, foodObj);
     });
@@ -155,7 +155,7 @@ const displayCart = function(foodObj, items) {
     .addClass('quantity')
     .text(foodObj.quantity);
   const $remove = $('<i>')
-    .addClass('fas fa-minus-circle')
+    .addClass('fa fa-arrow-left')
     .on('click', function(event) {
       if (foodObj.quantity > 1) {
         removeToQuantity(event, foodObj);
@@ -175,16 +175,15 @@ const displayCart = function(foodObj, items) {
       deleteItem(event, foodObj);
     });
   $price.append($delete);
-  $amount.append($add);
-  $amount.append($quantity);
   $amount.append($remove);
+  $amount.append($quantity);
+  $amount.append($add);
   $article.append($amount);
   $article.append($foodName);
   $article.append($price);
   $('#cartitems').append($article);
   return $('#cartitems');
 };
-
 
 const addItemToStorage = foodObj => {
   if (!localStorage.cart) {
@@ -264,12 +263,10 @@ const placeOrder = () => {
         console.log('Order Post completed.');
       });
   });
-
-
-}
+};
 
 $(function() {
   $(this).scrollTop(0);
-  addItemToCart()
-  placeOrder()
+  addItemToCart();
+  placeOrder();
 });

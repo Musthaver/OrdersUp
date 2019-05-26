@@ -11,23 +11,25 @@
 // }
 html {
   scroll-behavior: smooth;
+  
 }
 
 body {
   display:flex;
   flex-wrap:wrap;
   align-items:top;
-  background-color: #EEE;
+  background-color: #573d7c;
   margin-top: 140px;
+  font-family: 'Comfortaa', cursive;
 
   main {
     width: calc(100% - 300px);
-    background-color: #EEE;
+    background-color: #573d7c;
   
     section {
       margin: 10px;
       padding: 10px;
-      background: white;
+      background: #F0F0F0;
       
       h4 {
         margin: 0.5em;
@@ -83,5 +85,17 @@ body {
   }
 }
 
+#Appetizers {
+  border-radius: 15px;
+}
+#Salads {
+  border-radius: 15px;
+}
+#Fish\ \&\ Chips {
+  border-radius: 15px;
+}
+#Hamburgers\ \&\ Sandwiches {
+  border-radius: 15px;
+}
 
 

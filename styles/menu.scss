@@ -1,7 +1,7 @@
 #menu {
   top: 80px;
   width: 100%;
-  background-color: white;
+  background-color: #F0F0F0;
   position: fixed;
   z-index: 10;
   li {
@@ -14,18 +14,19 @@
   }
 }
 
-.fa-minus-circle {
-  font-size: 0.9em;
-  color: #573d7c !important;
-  padding-left: 8px;
+#anchorAppetizers {
+  position: relative;
+  bottom: 100px;
 }
-
-.fa-plus-circle {
-  font-size: 0.9em;
-  color: #573d7c !important;
-  padding-right: 8px;
+#anchorSalads {
+  position: relative;
+  bottom: 100px;
 }
-
-.fa-times-circle {
-  color: #573d7c !important;
+#anchorFish\ \&\ Chips {
+  position: relative;
+  bottom: 100px;
+}
+#anchorHamburgers\ \&\ Sandwiches {
+  position: relative;
+  bottom: 100px;
 }
