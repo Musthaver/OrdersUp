@@ -58,37 +58,37 @@
     <table>
       <thead>
         <tr>
-          <th>Order #</th>
-          <th>Customer name</th>
-          <th>Telephone</th>
-          <th>Order</th>
-          <th>time</th>
-          <th>date</th>
-          <th>Confirm Complete</th>
+          <th class='id'>Order#</th>
+          <th class='name'>Customer name</th>
+          <th class='phone'>Telephone</th>
+          <th class='order'>Order</th>
+          <th class='time'>Time</th>
+          <th class='date'>Date</th>
+          <th class='sms'>Confirm Complete</th>
         </tr>
       </thead>
       <tbody>
           <tr>
         <% for (const orderID of orders) { %>
-        <td>
+        <td class='id'>
           <%= orderID.id%>
         </td>
-        <td>
+        <td class='name'>
           <%= orderID.name%>
         </td>
-        <td>
+        <td class='phone'>
           <%= orderID.phone%>
         </td>
-        <td>
+        <td class='order'>
           <%= orderID.order%>
         </td>
-        <td>
+        <td class='time'>
           <%= orderID.time%>
         </td>
-        <td>
+        <td class='date'>
           <%= orderID.date%>
         </td>
-        <td>
+        <td class='sms'>
           <button>Send SMS</button>
         </td>
     </tr>

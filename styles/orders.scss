@@ -2,14 +2,40 @@ body {
     margin-top: 140px;
     font-family: 'Comfortaa', cursive;
     background: #F0F0F0;
-
+    h2 {
+      margin-left: 20px;;
+    }
     table {
         border-collapse: collapse;
-        width: 50vw;
+        table-layout: fixed;
+        width: 80%;
+        margin-left: 20px;
+      }
+      thead th:nth-child(1) {
+        width: 7%;
+      }
+      thead th:nth-child(2) {
+        width: 15%;
+      }
+      thead th:nth-child(3) {
+        width: 11%;
+      }
+      thead th:nth-child(4) {
+        width: 20%;
+      }
+      thead th:nth-child(5) {
+        width: 6%;
+      }
+      thead th:nth-child(6) {
+        width: 14%;
+      }
+      thead th:nth-child(7) {
+        width: 10%;
       }
       
       table, th, td {
         border: 1px solid #c3bfbf;
+        padding: 10px 10px;
       }
 
-}    
+}   
