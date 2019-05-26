@@ -84,24 +84,24 @@ const insertIntoDB = (id, name, phone, order, time, date) => {
     });
 };
 
-const sendSMSToClient = name => {
+const sendSMSToClient = (name) => {
   client.messages
-    .create({
-      body: `Hello ${name}, we have advised the restaurant of your order and we will advise you of the estimated pick-up time.`,
-      from: '+14387963088',
-      to: `+${phoneNumber}`
-    })
-    .then(message => console.log(message.sid));
+  .create({
+     body: `Hello ${name}, we have advised the restaurant of your order and we will advise you of the estimated pick-up time.`,
+     from: '+14387963088',
+   to: `+${phoneNumber}`
+   })
+  .then(message => console.log(message.sid));
 };
 
 const sendSMSToRestaurant = (name, order, time) => {
   client.messages
-    .create({
-      body: `Hello, ${name} sent a new order of ${order} at ${time}. Please respond with an ETA for the order to be ready`,
-      from: '+14387963088',
-      to: '+14388634759'
-    })
-    .then(message => console.log(message.sid));
+  .create({
+     body: `Hello, ${name} sent a new order of ${order} at ${time}. Please respond with an ETA for the order to be ready`,
+     from: '+14387963088',
+     to: '+14388634759'
+   })
+  .then(message => console.log(message.sid));
 };
 
 const selectASingleFood = (foodID, res) => {
@@ -118,19 +118,7 @@ const selectASingleFood = (foodID, res) => {
     });
 };
 
-const displayOrderPage = res => {
-  knex
-  .select()
-  .from('orders')
-  .then(results => {
-    res.render('orders', { orders: results });
-  })
-  .catch(function(err) {
-    console.log(err);
-  });
-}
-
-const displayHomePage = res => {
+const displayHomePage = (res) => {
   knex
     .select(
       'categories.name as category',
@@ -167,7 +155,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/past_orders', (req, res) => {
-  displayOrderPage(res)
+  res.render('orders.ejs')
+
 });
 
 app.post('/cart', (req, res) => {
@@ -184,12 +173,12 @@ app.delete('/cart', (req, res) => {
 });
 
 let phoneNumber;
-let clientName;
+let clientName; 
 
 app.post('/order', (req, res) => {
   const { name, phone, cartItems, date, time, id } = req.body;
   phoneNumber = phone;
-  clientName = name;
+  clientName = name
   let order = makeTheOrder(cartItems);
   insertIntoDB(id, name, phone, order, time, date);
   // sendSMSToClient(name);
@@ -203,9 +192,10 @@ app.listen(PORT, () => {
 
 // app.get('/oder/:id/message',(req, res)=>{
 //   req.params.id
-//   knex find
+//   knex find 
 //   res.send('good')
 // })
+
 
 app.post('/sms', (req, res) => {
   let response = req.body.Body;
@@ -213,14 +203,15 @@ app.post('/sms', (req, res) => {
   // .where({orders.id, =? })
   // .update({ message: response })
   client.messages
-    .create({
-      body: `Hello ${clientName}, your order will be ready in ${response}`,
-      from: '+14388634759',
-      to: `+${phoneNumber}`
-    })
-    .then(message => console.log(message.sid));
-
+  .create({
+     body: `Hello ${clientName}, your order will be ready in ${response}`,
+     from: '+14388634759',
+     to: `+${phoneNumber}`
+   })
+  .then(message => console.log(message.sid));
+  
   // res.render('index', response);
-  res.writeHead(200, { 'Content-Type': 'text/xml' });
+  res.writeHead(200, {'Content-Type': 'text/xml'});
   res.end(twiml.toString());
 });
+
