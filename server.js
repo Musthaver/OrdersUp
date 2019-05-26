@@ -176,8 +176,8 @@ app.post('/order', (req, res) => {
   clientName = name
   let order = makeTheOrder(cartItems);
   insertIntoDB(id, name, phone, order, time, date);
-  sendSMSToClient(name);
-  sendSMSToRestaurant(name, order, time);
+  // sendSMSToClient(name);
+  // sendSMSToRestaurant(name, order, time);
   res.end();
 });
 
