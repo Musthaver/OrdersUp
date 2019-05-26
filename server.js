@@ -123,8 +123,10 @@ const displayOrderPage = res => {
   .select()
   .from('orders')
   .then(results => {
+    console.log(results);
     res.render('orders', { orders: results });
   })
+  
   .catch(function(err) {
     console.log(err);
   });

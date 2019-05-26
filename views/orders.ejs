@@ -19,9 +19,14 @@
       integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay"
       crossorigin="anonymous"
     />
-    <link href="https://fonts.googleapis.com/css?family=Acme&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
-    
+    <link
+      href="https://fonts.googleapis.com/css?family=Acme&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- App CSS -->
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
@@ -49,20 +54,46 @@
   </nav>
 
   <body>
-        <h2>Orders</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Order #</th>
-              <th>Customer name</th>
-              <th>Telephone</th>
-              <th>Order</th>
-              <th>time</th>
-              <th>date</th>
-            </tr>
-          </thead>
-          <tbody>
-        </tbody>
-        </table>
+    <h2>Orders</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Customer name</th>
+          <th>Telephone</th>
+          <th>Order</th>
+          <th>time</th>
+          <th>date</th>
+          <th>Confirm Complete</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+        <% for (const orderID of orders) { %>
+        <td>
+          <%= orderID.id%>
+        </td>
+        <td>
+          <%= orderID.name%>
+        </td>
+        <td>
+          <%= orderID.phone%>
+        </td>
+        <td>
+          <%= orderID.order%>
+        </td>
+        <td>
+          <%= orderID.time%>
+        </td>
+        <td>
+          <%= orderID.date%>
+        </td>
+        <td>
+          <button>Send SMS</button>
+        </td>
+    </tr>
+        <% } %>
+      </tbody>
+    </table>
   </body>
 </html>
