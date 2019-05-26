@@ -59,66 +59,7 @@
 
 
           
-
-  </nav>
-  <nav id="menu">
-    <ul class="nav">
-      <% for (const category of categories) { %>
-      <li class="nav-item"> 
-        <a class="nav-link-<%=category%>" href="#anchor<%=category%>"
-          ><%=category%></a
-        >
-      </li>
-      <% }; %>
-    </ul>
-  </nav>
   <body>
-    <main>
-      <% for (const category of categories) { %>
-      <section id="<%=category%>">
-          <a id="anchor<%=category%>"></a>
-        <h4><%=category%></h4>
-        <div class="food-cards">
-          <% for (const foodObj of results) { %> <% if (foodObj.category ===
-          category) { %>
-          <article class="<%= foodObj.id%>">
-          <img class="card-img-top" alt="Food image" src="<%= foodObj.image%>"/>
-          <div class="card-body">
-            <div class="text"><h5><%= foodObj.name%></h5><h6><%= foodObj.price%></h6></div>
-            <p class="card-text"><%= foodObj.description%></p>
-          </div>
-          </article>
-        <% } %> <% }; %>
-        </div>
-      </section>
-      <% }; %>
-    </main>
-    <aside id="cart">
-      <header>
-        <h3>Restaurant Name</h3><br>
-        <p>Pick up address:</p>
-        <p>123 Street Name</p>
-        <p>Phone: 1-555-678-234</p>
-      </header>
-      <div id="cartitems">
-     </div>
-    </div>
-      <div id="total">
-        <p class="subtotal">Subtotal: $0</p>
-        <p class="taxes">Taxes: $0</p>
-        <p class="total">Total: $0</p>
-      </div>
-      <form class="placeOrder" method="POST" action="/order">
-        <input type="text" name="name" placeholder="Name" Required>
-        <input type="text" name="phone" placeholder="1-514-555-4444" pattern="^1-?[0-9]{3}-?[0-9]{3}-?[0-9]{4}$" Required>
-        <button type="submit" class="btn btn-primary">Place my order 
-           
-        </button>
-      </form>
-    </aside>
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
