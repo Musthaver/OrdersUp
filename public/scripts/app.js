@@ -89,7 +89,7 @@ const deleteItem = (event, foodObj) => {
     const cart = JSON.parse({ ...localStorage }.cart);
     let cleared = cart.filter(obj => obj.name !== foodObj.name);
     localStorage.setItem('cart', JSON.stringify(cleared));
-    doTheMath(cart);
+    doTheMath(cleared);
     $('#cartitems').empty();
     renderFoods(cleared);
   });
@@ -97,13 +97,11 @@ const deleteItem = (event, foodObj) => {
 };
 
 const doTheMath = function(cart) {
- 
   let subtotal = round(calculateTotal(cart));
   let taxes = round(calculateTaxes(calculateTotal(cart)));
   $('.subtotal').text('Subtotal: $' + subtotal.toFixed(2));
   $('.taxes').text('Taxes: $' + taxes.toFixed(2));
   $('.total').text('Total: $' + round(subtotal + taxes).toFixed(2));
-  
 };
 
 const removeToQuantity = (event, foodObj) => {
@@ -118,12 +116,12 @@ const removeToQuantity = (event, foodObj) => {
         cart[i].quantity = cart[i].quantity - 1;
         localStorage.setItem('cart', JSON.stringify(cart));
       }
-    doTheMath(cart);
-    $('#cartitems').empty();
-    renderFoods(cart);
+      doTheMath(cart);
+      $('#cartitems').empty();
+      renderFoods(cart);
+    }
   });
 };
-
 const addToQuantity = (event, foodObj) => {
   event.preventDefault();
   $.ajax({
