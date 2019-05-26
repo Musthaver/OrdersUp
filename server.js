@@ -229,6 +229,7 @@ app.post('/sms', (req, res) => {
 
 app.post('/past_orders/sms', (req, res) => {
   const {phoneNumber} = req.body;
+  console.log(phoneNumber);
   client.messages
   .create({
     body: `Hello, your order is ready for pickup.`,
@@ -236,4 +237,5 @@ app.post('/past_orders/sms', (req, res) => {
     to: `+${phoneNumber}`
   })
   .then(message => console.log(message.sid));
+  res.end();
 });

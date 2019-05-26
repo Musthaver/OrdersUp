@@ -274,11 +274,10 @@ $(function() {
   $('.sms').on('click', function(event) {
     event.preventDefault();
     const phoneNumber = ($(this).parent().find('.phone').text());
-    console.log(phoneNumber);
     $.ajax({
       method: 'POST',
       url: '/past_orders/sms',
-      data: phoneNumber
+      data: {phoneNumber: phoneNumber}
     })
     .done(response => {
       alert('Hello!')})
