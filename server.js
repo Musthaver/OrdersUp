@@ -218,13 +218,22 @@ app.post('/sms', (req, res) => {
 
 //sending text to client when restaurant clicks on Send SMS button on orders page
 app.post('/past_orders/sms', (req, res) => {
-  const {phoneNumber} = req.body;
-  client.messages
-  .create({
-    body: `Hello, your order is ready for pickup.`,
-    from: '+14387963088',
-    to: `+${phoneNumber}`
+  knex("orders")
+  .where({ id: req.body.orderID })
+  .update({ confirm_sent: true })
+  .then(results => {
   })
-  .then(message => console.log(message.sid));
+  .catch(function(err) {
+    console.log(err);
+  });
+  const phoneNumber = req.body.phoneNumber;
+  console.log(phoneNumber);
+  // client.messages
+  // .create({
+  //   body: `Hello, your order is ready for pickup.`,
+  //   from: '+14387963088',
+  //   to: `+${phoneNumber}`
+  // })
+  // .then(message => console.log(message.sid));
   res.end();
 });

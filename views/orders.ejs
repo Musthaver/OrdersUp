@@ -50,7 +50,8 @@
         <img class="logo" src="/img/utensils.png" />
       </a>
     </div>
-    <span class="header">Order's Up</span>
+    <span class="header">
+        <a href='/' style="text-decoration:none";>Order's Up</a>
   </nav>
 
   <body>
@@ -89,7 +90,11 @@
           <%= orderID.date%>
         </td>
         <td class='sms'>
+            <% if (!orderID.confirm_sent) { %>
           <div id="sentsms<%= orderID.id%>"><button id="sendsms<%= orderID.id%>">Send SMS</button></div>
+              <% } else { %>
+              <span>Sent</span>
+              <% } %>
         </td>
     </tr>
         <% } %>
