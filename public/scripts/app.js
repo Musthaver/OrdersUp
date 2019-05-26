@@ -131,11 +131,11 @@ const sendOrderReady = () => {
     $.ajax({
       method: 'POST',
       url: '/past_orders/sms',
-      data: { phoneNumber: phoneNumber }
+      data: { phoneNumber: phoneNumber, orderID: orderID }
     })
       .done(response => {
         $(`#sendsms${orderID}`).remove();
-        $(`#sentsms${orderID}`).text('Sent!');
+        $(`#sentsms${orderID}`).text('Sent');
       })
       .fail(err => console.log('Error', err));
   });
