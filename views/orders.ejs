@@ -68,8 +68,8 @@
         </tr>
       </thead>
       <tbody>
-          <tr>
-        <% for (const orderID of orders) { %>
+            <% for (const orderID of orders) { %>
+          <tr id="<%= orderID.id%>">
         <td class='id'>
           <%= orderID.id%>
         </td>

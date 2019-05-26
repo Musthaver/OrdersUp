@@ -209,6 +209,7 @@ const renderFoods = itemsArray => {
   }
 };
 
+
 const placeOrder = () => {
   $('.placeOrder').on('submit', function(event) {
     event.preventDefault();
@@ -267,4 +268,20 @@ $(function() {
   $(this).scrollTop(0);
   addItemToCart();
   placeOrder();
+  // const cart = JSON.parse({ ...localStorage }.cart);
+  // renderFoods(cart);
+
+  $('.sms').on('click', function(event) {
+    event.preventDefault();
+    const phoneNumber = ($(this).parent().find('.phone').text());
+    console.log(phoneNumber);
+    $.ajax({
+      method: 'POST',
+      url: '/past_orders/sms',
+      data: phoneNumber
+    })
+    .done(response => {
+      alert('Hello!')})
+    .fail(err => console.log('Error', err))
+  });    
 });

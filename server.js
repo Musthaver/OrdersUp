@@ -99,7 +99,7 @@ const sendSMSToRestaurant = (name, order, time) => {
     .create({
       body: `Hello, ${name} sent a new order of ${order} at ${time}. Please respond with an ETA for the order to be ready`,
       from: '+14387963088',
-      to: '+14388634759'
+      to: '+15148059285'
     })
     .then(message => console.log(message.sid));
 };
@@ -217,7 +217,7 @@ app.post('/sms', (req, res) => {
   client.messages
     .create({
       body: `Hello ${clientName}, your order will be ready in ${response}`,
-      from: '+14388634759',
+      from: '+14387963088',
       to: `+${phoneNumber}`
     })
     .then(message => console.log(message.sid));
@@ -225,4 +225,15 @@ app.post('/sms', (req, res) => {
   // res.render('index', response);
   res.writeHead(200, { 'Content-Type': 'text/xml' });
   res.end(twiml.toString());
+});
+
+app.post('/past_orders/sms', (req, res) => {
+  const {phoneNumber} = req.body;
+  client.messages
+  .create({
+    body: `Hello, your order is ready for pickup.`,
+    from: '+14387963088',
+    to: `+${phoneNumber}`
+  })
+  .then(message => console.log(message.sid));
 });
