@@ -273,14 +273,18 @@ $(function() {
 
   $('.sms').on('click', function(event) {
     event.preventDefault();
-    const phoneNumber = ($(this).parent().find('.phone').text());
+    const phoneNumber = ($(this).parent().find('.phone').text().trim());
+    const orderID = ($(this).parent().find('.id').text().trim());
+    console.log(orderID)
     $.ajax({
       method: 'POST',
       url: '/past_orders/sms',
       data: {phoneNumber: phoneNumber}
     })
     .done(response => {
-      alert('Hello!')})
+     $(`#sendsms${orderID}`).remove()
+     $(`#sentsms${orderID}`).text('Sent!')
+    })
     .fail(err => console.log('Error', err))
   });    
 });
