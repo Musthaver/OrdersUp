@@ -78,7 +78,7 @@ const generateRandomString = () =>
     .toString(36)
     .substring(7);
 
-//calculate taxes    
+//calculate taxes
 const calculateTaxes = subtotal => {
   return round(subtotal * 0.15);
 };

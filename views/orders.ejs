@@ -90,11 +90,13 @@
           <%= orderID.date%>
         </td>
         <td class='sms'>
-            <% if (!orderID.confirm_sent) { %>
-          <div id="sentsms<%= orderID.id%>"><button id="sendsms<%= orderID.id%>">Send SMS</button></div>
-              <% } else { %>
-              <span>Sent</span>
-              <% } %>
+
+        <% if (!orderID.SMSsent) { %>
+          <div id="sendsms<%= orderID.id%>"><button id="sendsms<%= orderID.id%>">Send SMS</button></div>
+         <% } else { %>
+          <div>Sent &#9993 </div>
+          <% } %>
+
         </td>
     </tr>
         <% } %>
