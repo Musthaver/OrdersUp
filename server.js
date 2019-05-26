@@ -154,6 +154,11 @@ app.get('/', (req, res) => {
   displayHomePage(res);
 });
 
+app.get('/past_orders', (req, res) => {
+  res.render('orders.ejs')
+
+});
+
 app.post('/cart', (req, res) => {
   const foodID = Object.keys(req.body)[0];
   selectASingleFood(foodID, res);
