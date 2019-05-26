@@ -99,7 +99,7 @@ const sendSMSToRestaurant = (name, order, time) => {
   .create({
      body: `Hello, ${name} sent a new order of ${order} at ${time}. Please respond with an ETA for the order to be ready`,
      from: '+14387963088',
-     to: '+15148059285'
+     to: '+14388634759'
    })
   .then(message => console.log(message.sid));
 };
@@ -191,7 +191,7 @@ app.post('/sms', (req, res) => {
   client.messages
   .create({
      body: `Hello ${clientName}, your order will be ready in ${response}`,
-     from: '+14387963088',
+     from: '+14388634759',
      to: `+${phoneNumber}`
    })
   .then(message => console.log(message.sid));
