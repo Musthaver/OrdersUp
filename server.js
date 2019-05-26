@@ -22,14 +22,10 @@ const usersRoutes = require('./routes/users');
 
 //TWilio
 const http = require('http');
-
 http.createServer(app).listen(1337, () => {
   console.log('Express server listening on port 1337');
 });
 
-// Load the logger first so all (static) HTTP requests are logged to STDOUT
-// 'dev' = Concise output colored by response status for development use.
-// The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
 app.use(morgan('dev'));
 
 // Log knex SQL queries to STDOUT as well
@@ -47,13 +43,11 @@ app.use(
   })
 );
 app.use(express.static('public'));
-// app.use("/public", express.static(__dirname + '/public'));
-// app.use('/img',express.static(path.join(__dirname, 'public/img')));
 
 // Mount all resource routes
 app.use('/api/users', usersRoutes(knex));
-// app.use('/img', express.static(path.join(__dirname, 'public/img')));
 
+//format the order format send it to the restaurant via SMS
 const makeTheOrder = cartItems => {
   let order = '';
   for (let [i, orderObj] of cartItems.entries()) {
@@ -66,6 +60,7 @@ const makeTheOrder = cartItems => {
   return order;
 };
 
+//Add the order to the oder DB
 const insertIntoDB = (id, name, phone, order, time, date) => {
   knex('orders')
     .insert({
@@ -77,13 +72,13 @@ const insertIntoDB = (id, name, phone, order, time, date) => {
       date: date
     })
     .then(results => {
-      console.log('worked');
     })
     .catch(function(err) {
       console.log(err);
     });
 };
 
+//Send initial SMS to the client upon placed order
 const sendSMSToClient = name => {
   client.messages
     .create({
@@ -94,6 +89,7 @@ const sendSMSToClient = name => {
     .then(message => console.log(message.sid));
 };
 
+//Send initial SMS to the Restaurant upon placed order
 const sendSMSToRestaurant = (name, order, time) => {
   client.messages
     .create({
@@ -104,6 +100,7 @@ const sendSMSToRestaurant = (name, order, time) => {
     .then(message => console.log(message.sid));
 };
 
+//knex request to pull a food from the database to be added to the cart
 const selectASingleFood = (foodID, res) => {
   knex
     .select()
@@ -118,20 +115,20 @@ const selectASingleFood = (foodID, res) => {
     });
 };
 
+//knex request to pull the restaurant's orders for their orders page
 const displayOrderPage = res => {
   knex
   .select()
   .from('orders')
   .then(results => {
-    console.log(results);
     res.render('orders', { orders: results });
   })
-  
   .catch(function(err) {
     console.log(err);
   });
 }
 
+//knex request to pull all the foods by category from DB (ordered by category)
 const displayHomePage = res => {
   knex
     .select(
@@ -154,6 +151,7 @@ const displayHomePage = res => {
     });
 };
 
+//creating an array of categories to help display them on index.ejs
 const matchCategories = results => {
   const arrayOfCategories = [];
   for (const obj of results) {
@@ -188,6 +186,7 @@ app.delete('/cart', (req, res) => {
 let phoneNumber;
 let clientName;
 
+//add order to the DB, call send initial SMS functions
 app.post('/order', (req, res) => {
   const { name, phone, cartItems, date, time, id } = req.body;
   phoneNumber = phone;
@@ -203,17 +202,9 @@ app.listen(PORT, () => {
   console.log('Example app listening on port ' + PORT);
 });
 
-// app.get('/oder/:id/message',(req, res)=>{
-//   req.params.id
-//   knex find
-//   res.send('good')
-// })
-
+//forwarding time estimate from the restaurant to the client
 app.post('/sms', (req, res) => {
   let response = req.body.Body;
-  // knex knex('orders')
-  // .where({orders.id, =? })
-  // .update({ message: response })
   client.messages
     .create({
       body: `Hello ${clientName}, your order will be ready in ${response}`,
@@ -221,15 +212,13 @@ app.post('/sms', (req, res) => {
       to: `+${phoneNumber}`
     })
     .then(message => console.log(message.sid));
-
-  // res.render('index', response);
   res.writeHead(200, { 'Content-Type': 'text/xml' });
   res.end(twiml.toString());
 });
 
+//sending text to client when restaurant clicks on Send SMS button on orders page
 app.post('/past_orders/sms', (req, res) => {
   const {phoneNumber} = req.body;
-  console.log(phoneNumber);
   client.messages
   .create({
     body: `Hello, your order is ready for pickup.`,
