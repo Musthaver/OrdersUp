@@ -32,7 +32,9 @@ app.use(morgan('dev'));
 app.use(knexLogger(knex));
 
 app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(
   '/styles',
   sass({
@@ -69,10 +71,10 @@ const insertIntoDB = (id, name, phone, order, time, date) => {
       phone: phone,
       order: order,
       time: time,
-      date: date
+      date: date,
+      SMSsent: false
     })
-    .then(results => {
-    })
+    .then(results => {})
     .catch(function(err) {
       console.log(err);
     });
@@ -118,15 +120,17 @@ const selectASingleFood = (foodID, res) => {
 //knex request to pull the restaurant's orders for their orders page
 const displayOrderPage = res => {
   knex
-  .select()
-  .from('orders')
-  .orderBy('time')
-  .then(results => {
-    res.render('orders', { orders: results });
-  })
-  .catch(function(err) {
-    console.log(err);
-  });
+    .select()
+    .from('orders')
+    .orderBy('time')
+    .then(results => {
+      res.render('orders', {
+        orders: results
+      });
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
 }
 
 //knex request to pull all the foods by category from DB (ordered by category)
@@ -145,7 +149,10 @@ const displayHomePage = res => {
     .orderBy('categories.id')
     .then(results => {
       let arrayOfCategories = matchCategories(results);
-      res.render('index', { results, categories: arrayOfCategories });
+      res.render('index', {
+        results,
+        categories: arrayOfCategories
+      });
     })
     .catch(function(err) {
       console.log(err);
@@ -189,7 +196,14 @@ let clientName;
 
 //add order to the DB, call send initial SMS functions
 app.post('/order', (req, res) => {
-  const { name, phone, cartItems, date, time, id } = req.body;
+  const {
+    name,
+    phone,
+    cartItems,
+    date,
+    time,
+    id
+  } = req.body;
   phoneNumber = phone;
   clientName = name;
   let order = makeTheOrder(cartItems);
@@ -213,19 +227,32 @@ app.post('/sms', (req, res) => {
       to: `+${phoneNumber}`
     })
     .then(message => console.log(message.sid));
-  res.writeHead(200, { 'Content-Type': 'text/xml' });
+  res.writeHead(200, {
+    'Content-Type': 'text/xml'
+  });
   res.end(twiml.toString());
 });
 
 //sending text to client when restaurant clicks on Send SMS button on orders page
 app.post('/past_orders/sms', (req, res) => {
-  const {phoneNumber} = req.body;
+  const {
+    phoneNumber
+  } = req.body;
+  knex('orders').where({
+      phone: phoneNumber
+    }).update('SMSsent', true)
+    .then(results => {
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+
   client.messages
-  .create({
-    body: `Hello, your order is ready for pickup.`,
-    from: '+14387963088',
-    to: `+${phoneNumber}`
-  })
-  .then(message => console.log(message.sid));
+    .create({
+      body: `Hello, your order is ready for pickup.`,
+      from: '+14387963088',
+      to: `+${phoneNumber}`
+    })
+    .then(message => console.log(message.sid));
   res.end();
 });
