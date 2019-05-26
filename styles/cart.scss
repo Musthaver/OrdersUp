@@ -6,7 +6,17 @@ background-color: #F0F0F0;
 padding: 10px;
 height: 100vh;
 border-radius: 15px;
+
+    header {
+    line-height: 0.7em;
+    border-bottom: 1px solid grey;
+        h3 {
+            text-align: center;
+        }
+    }
+
   #cartitems {
+      margin-top: 10px;
 
     article {
         display: flex;

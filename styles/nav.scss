@@ -1,6 +1,6 @@
 #nav-bar {
   display: flex;
-  padding: 0px 2em;
+  padding: 0em 1em;
   position: fixed;
   top: 0;
   height: 80px;
@@ -31,11 +31,7 @@
   position: fixed;
   z-index: 10;
   li {
-    padding: 1em 0.5em;
-    text-decoration: none;
-    a {
-      text-decoration: none;
-    }
+    padding: 0.5em 0em;
   }
 }
 
@@ -65,7 +61,7 @@
   display: inline-block;
   position: relative;
   z-index: 1;
-  padding: 30px;
+  padding: 10px;
   border-radius: 50%;
   -webkit-border-radius: 50%;
 }
