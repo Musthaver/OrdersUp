@@ -3,17 +3,39 @@ const urlCart = '/cart';
 const urlQuantity = '/cart/quantity';
 const urlOrder = '/order';
 
-const request = (options, cb) => {
-  $.ajax(options)
-    .done(response => {
-      cb(response);
-    })
-    .fail(err => console.log('Error', err))
-    .always(() => console.log('Request completed.'));
+
+//Generate random string for the OrderID
+const generateRandomString = () =>
+  Math.random()
+  .toString(36)
+  .substring(7);
+
+  //Create time to log when order was placed
+const getCreateTime = () => {
+  const today = new Date();
+  const hours = today.getHours();
+  const min = today.getMinutes();
+
+  return `${hours}:${min}`;
+};
+
+//Create a date to log when order was placed
+const getCreateDate = () => {
+  const today = new Date();
+  const dd = today.getDate();
+  const mm = today.getMonth() + 1;
+  const yyyy = today.getFullYear();
+
+  return `${dd}/${mm}/${yyyy}`;
+};
+
+//rounding function to round the total to two decimals
+const round = number => {
+  return Math.round(number * 100) / 100;
 };
 
 //Calculate the subtotal of all the items in the cart
-const calculateTotal = cartArray => {
+const calculateSubTotal = cartArray => {
   const priceArray = [];
   for (const keyID of cartArray) {
     let quantity = keyID.quantity;
@@ -27,169 +49,20 @@ const calculateTotal = cartArray => {
   }
 };
 
-//Create a date to log when order was placed
-const getCreateDate = () => {
-  const today = new Date();
-  const dd = today.getDate();
-  const mm = today.getMonth() + 1;
-  const yyyy = today.getFullYear();
-
-  return `${dd}/${mm}/${yyyy}`;
-};
-
-//Create time to log when order was placed
-const getCreateTime = () => {
-  const today = new Date();
-  const hours = today.getHours();
-  const min = today.getMinutes();
-
-  return `${hours}:${min}`;
-};
-
-//Add item from main page to the cart
-const addItemToCart = () => {
-  $('main article').on('click', function(event) {
-    event.preventDefault();
-    const foodID = $(this).attr('class');
-    $.ajax({
-        method: 'POST',
-        url: urlCart,
-        data: foodID
-      })
-      .done(response => {
-        addItemToStorage(response[0]);
-        const cart = JSON.parse({ ...localStorage
-        }.cart);
-        doTheMath(cart);
-        $('#cartitems').empty();
-        renderFoods(cart);
-      })
-      .fail(error => {
-        console.log(`Error: ${error}`);
-      })
-      .always(() => {
-        console.log('Request completed');
-      });
-  });
-};
-
-//Generate random string for the OrderID
-const generateRandomString = () =>
-  Math.random()
-  .toString(36)
-  .substring(7);
-
 //calculate taxes
 const calculateTaxes = subtotal => {
   return round(subtotal * 0.15);
 };
 
-//rounding function to round the total to two decimals
-const round = number => {
-  return Math.round(number * 100) / 100;
-};
-
-//Delete an item from the cart
-const deleteItem = (event, foodObj) => {
-  event.preventDefault();
-  $.ajax({
-    url: urlCart,
-    method: 'DELETE'
-  }).done(function() {
-    const cart = JSON.parse({ ...localStorage
-    }.cart);
-    let cleared = cart.filter(obj => obj.name !== foodObj.name);
-    localStorage.setItem('cart', JSON.stringify(cleared));
-    doTheMath(cleared);
-    $('#cartitems').empty();
-    if(cleared.length === 0){
-      displayEmptyCart();
-    }
-    renderFoods(cleared);
-  });
-  return;
-};
-
 //Add subtotal, taxes and total to the cart
 const doTheMath = function(cart) {
-  let subtotal = round(calculateTotal(cart));
-  let taxes = round(calculateTaxes(calculateTotal(cart)));
+  let subtotal = round(calculateSubTotal(cart));
+  let taxes = round(calculateTaxes(calculateSubTotal(cart)));
   $('.subtotal').text('Subtotal: $' + subtotal.toFixed(2));
   $('.taxes').text('Taxes: $' + taxes.toFixed(2));
   $('.total').text('Total: $' + round(subtotal + taxes).toFixed(2));
 };
 
-//Send SMS to the client from past orders page to confirm order is ready
-const sendOrderReady = () => {
-  $('.sms').on('click', function(event) {
-    event.preventDefault();
-    const phoneNumber = $(this)
-      .parent()
-      .find('.phone')
-      .text()
-      .trim();
-    const orderID = $(this)
-      .parent()
-      .find('.id')
-      .text()
-      .trim();
-    $.ajax({
-        method: 'POST',
-        url: '/past_orders/sms',
-        data: {
-          phoneNumber: phoneNumber,
-          orderID: orderID
-        }
-      })
-      .done(response => {
-        $(`#sendsms${orderID}`).remove();
-        $(`#sentsms${orderID}`).text('Sent');
-      })
-      .fail(err => console.log('Error', err));
-  });
-};
-
-//Reduce quantity of an item in the cart by 1
-const removeToQuantity = (event, foodObj) => {
-  event.preventDefault();
-  $.ajax({
-    url: urlQuantity,
-    method: 'POST'
-  }).done(function() {
-    const cart = JSON.parse({ ...localStorage
-    }.cart);
-    for (var i = 0; i < cart.length; i++) {
-      if (cart[i].id === foodObj.id) {
-        cart[i].quantity = cart[i].quantity - 1;
-        localStorage.setItem('cart', JSON.stringify(cart));
-      }
-      doTheMath(cart);
-      $('#cartitems').empty();
-      renderFoods(cart);
-    }
-  });
-};
-
-//Increase the quantity of an item in the cart by 1
-const addToQuantity = (event, foodObj) => {
-  event.preventDefault();
-  $.ajax({
-    url: urlQuantity,
-    method: 'POST'
-  }).done(function() {
-    const cart = JSON.parse({ ...localStorage
-    }.cart);
-    for (var i = 0; i < cart.length; i++) {
-      if (cart[i].id === foodObj.id) {
-        cart[i].quantity = cart[i].quantity + 1;
-        localStorage.setItem('cart', JSON.stringify(cart));
-      }
-    }
-    doTheMath(cart);
-    $('#cartitems').empty();
-    renderFoods(cart);
-  });
-};
 
 //Jquery building one cart item
 const displayCart = function(foodObj, items) {
@@ -235,6 +108,99 @@ const displayCart = function(foodObj, items) {
   return $('#cartitems');
 };
 
+//If cart empty, show a pizza!
+const displayEmptyCart = foodObj => {
+  if (localStorage.length === 0) {
+    const $emptyCart = $('<i>').addClass("fas fa-pizza-slice");
+    $('#cartitems').append($emptyCart);
+    return;
+  }
+  const cart = JSON.parse({ ...localStorage
+  }.cart);
+  let cleared = cart.filter(obj => obj.name !== foodObj.name);
+  if (cleared.length === 0) {
+    const $emptyCart = $('<i>').addClass("fas fa-pizza-slice");
+    $('#cartitems').append($emptyCart);
+    return;
+  }
+};
+
+//append each object to cart
+const renderFoods = itemsArray => {
+  for (const foodObj of itemsArray) {
+    $('#cartitems').append(displayCart(foodObj, itemsArray));
+  }
+};
+
+//Add item from main page to the cart
+const addItemToCart = () => {
+  $('main article').on('click', function(event) {
+    event.preventDefault();
+    const foodID = $(this).attr('class');
+    $.ajax({
+        method: 'POST',
+        url: urlCart,
+        data: foodID
+      })
+      .done(response => {
+        addItemToStorage(response[0]);
+        const cart = JSON.parse({ ...localStorage
+        }.cart);
+        doTheMath(cart);
+        $('#cartitems').empty();
+        renderFoods(cart);
+      })
+      .fail(error => {
+        console.log(`Error: ${error}`);
+      })
+      .always(() => {
+        console.log('Request completed');
+      });
+  });
+};
+
+//Increase the quantity of an item in the cart by 1
+const addToQuantity = (event, foodObj) => {
+  event.preventDefault();
+  $.ajax({
+    url: urlQuantity,
+    method: 'POST'
+  }).done(function() {
+    const cart = JSON.parse({ ...localStorage
+    }.cart);
+    for (var i = 0; i < cart.length; i++) {
+      if (cart[i].id === foodObj.id) {
+        cart[i].quantity = cart[i].quantity + 1;
+        localStorage.setItem('cart', JSON.stringify(cart));
+      }
+    }
+    doTheMath(cart);
+    $('#cartitems').empty();
+    renderFoods(cart);
+  });
+};
+
+//Reduce quantity of an item in the cart by 1
+const removeToQuantity = (event, foodObj) => {
+  event.preventDefault();
+  $.ajax({
+    url: urlQuantity,
+    method: 'POST'
+  }).done(function() {
+    const cart = JSON.parse({ ...localStorage
+    }.cart);
+    for (var i = 0; i < cart.length; i++) {
+      if (cart[i].id === foodObj.id) {
+        cart[i].quantity = cart[i].quantity - 1;
+        localStorage.setItem('cart', JSON.stringify(cart));
+      }
+      doTheMath(cart);
+      $('#cartitems').empty();
+      renderFoods(cart);
+    }
+  });
+};
+
 //Add an item to localstorage / manage quantity Key/value
 const addItemToStorage = foodObj => {
   if (!localStorage.cart) {
@@ -257,11 +223,25 @@ const addItemToStorage = foodObj => {
   }
 };
 
-//append each object to cart
-const renderFoods = itemsArray => {
-  for (const foodObj of itemsArray) {
-    $('#cartitems').append(displayCart(foodObj, itemsArray));
-  }
+//Delete an item from the cart/storage
+const deleteItem = (event, foodObj) => {
+  event.preventDefault();
+  $.ajax({
+    url: urlCart,
+    method: 'DELETE'
+  }).done(function() {
+    const cart = JSON.parse({ ...localStorage
+    }.cart);
+    let cleared = cart.filter(obj => obj.name !== foodObj.name);
+    localStorage.setItem('cart', JSON.stringify(cleared));
+    doTheMath(cleared);
+    $('#cartitems').empty();
+    if (cleared.length === 0) {
+      displayEmptyCart(foodObj);
+    }
+    renderFoods(cleared);
+  });
+  return;
 };
 
 //Upon submit ajax request and clear cart
@@ -307,30 +287,49 @@ const placeOrder = () => {
   });
 };
 
-//If cart empty, show a pizza!
-const displayEmptyCart = () => {
-     const cart = JSON.parse({ ...localStorage
-    }.cart);
-    let cleared = cart.filter(obj => obj.name !== foodObj.name);
-  if (localStorage.length === 0 || cleared.length === 0) {
-    const $emptyCart = $('<i>').addClass("fas fa-pizza-slice");
-    $('#cartitems').append($emptyCart);
-  }
-};
-
 const deleteCart = () => {
   $('#button2').on('click', function(event) {
     localStorage.clear();
     $('#cartitems').empty()
     doTheMath([])
-    displayEmptyCart();
+    displayEmptyCart({});
   })
 }
+
+//Send SMS to the client from past orders page to confirm order is ready
+const sendOrderReady = () => {
+  $('.sms').on('click', function(event) {
+    event.preventDefault();
+    const phoneNumber = $(this)
+      .parent()
+      .find('.phone')
+      .text()
+      .trim();
+    const orderID = $(this)
+      .parent()
+      .find('.id')
+      .text()
+      .trim();
+    $.ajax({
+        method: 'POST',
+        url: '/past_orders/sms',
+        data: {
+          phoneNumber: phoneNumber,
+          orderID: orderID
+        }
+      })
+      .done(response => {
+        $(`#sendsms${orderID}`).remove();
+        $(`#sentsms${orderID}`).text('Sent');
+      })
+      .fail(err => console.log('Error', err));
+  });
+};
 
 //On load call function and load localstorage cart if it exists
 $(function() {
   $(this).scrollTop(0);
-  displayEmptyCart();
+  displayEmptyCart({});
   deleteCart()
   addItemToCart();
   placeOrder();
