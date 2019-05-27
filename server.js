@@ -130,7 +130,6 @@ const insertIntoDB = (id, name, phone, order, time, date) => {
       order: order,
       time: time,
       date: date,
-      SMSsent: false
     })
     .then(results => {})
     .catch(function(err) {

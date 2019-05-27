@@ -26,7 +26,7 @@ const getCreateDate = () => {
   const mm = today.getMonth() + 1;
   const yyyy = today.getFullYear();
 
-  return `${dd}/${mm}/${yyyy}`;
+  return `${mm}/${dd}/${yyyy}`;
 };
 
 //rounding function to round the total to two decimals
