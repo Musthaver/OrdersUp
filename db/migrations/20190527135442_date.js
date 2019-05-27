@@ -1,6 +1,6 @@
 exports.up = function(knex, Promise) {
   return knex.schema.table('orders', function(t) {
-    t.dropColumn('datLe');
+    t.dropColumn('date');
   });
 };
 
