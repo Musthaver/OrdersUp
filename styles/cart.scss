@@ -6,6 +6,7 @@ background-color: #F0F0F0;
 padding: 10px;
 height: 100vh;
 border-radius: 15px;
+z-index: 5;
 
     header {
     line-height: 0.7em;
@@ -60,7 +61,7 @@ border-radius: 15px;
         margin-bottom: 3px;
     }
     button {
-        display: center; 
+        display: center;
     }
   }
 }

@@ -52,13 +52,14 @@ const addItemToCart = () => {
     event.preventDefault();
     const foodID = $(this).attr('class');
     $.ajax({
-      method: 'POST',
-      url: urlCart,
-      data: foodID
-    })
+        method: 'POST',
+        url: urlCart,
+        data: foodID
+      })
       .done(response => {
         addItemToStorage(response[0]);
-        const cart = JSON.parse({ ...localStorage }.cart);
+        const cart = JSON.parse({ ...localStorage
+        }.cart);
         doTheMath(cart);
         $('#cartitems').empty();
         renderFoods(cart);
@@ -75,8 +76,8 @@ const addItemToCart = () => {
 //Generate random string for the OrderID
 const generateRandomString = () =>
   Math.random()
-    .toString(36)
-    .substring(7);
+  .toString(36)
+  .substring(7);
 
 //calculate taxes
 const calculateTaxes = subtotal => {
@@ -95,11 +96,15 @@ const deleteItem = (event, foodObj) => {
     url: urlCart,
     method: 'DELETE'
   }).done(function() {
-    const cart = JSON.parse({ ...localStorage }.cart);
+    const cart = JSON.parse({ ...localStorage
+    }.cart);
     let cleared = cart.filter(obj => obj.name !== foodObj.name);
     localStorage.setItem('cart', JSON.stringify(cleared));
     doTheMath(cleared);
     $('#cartitems').empty();
+    if(cleared.length === 0){
+      displayEmptyCart(cleared);
+    }
     renderFoods(cleared);
   });
   return;
@@ -129,10 +134,13 @@ const sendOrderReady = () => {
       .text()
       .trim();
     $.ajax({
-      method: 'POST',
-      url: '/past_orders/sms',
-      data: { phoneNumber: phoneNumber, orderID: orderID }
-    })
+        method: 'POST',
+        url: '/past_orders/sms',
+        data: {
+          phoneNumber: phoneNumber,
+          orderID: orderID
+        }
+      })
       .done(response => {
         $(`#sendsms${orderID}`).remove();
         $(`#sentsms${orderID}`).text('Sent');
@@ -148,7 +156,8 @@ const removeToQuantity = (event, foodObj) => {
     url: urlQuantity,
     method: 'POST'
   }).done(function() {
-    const cart = JSON.parse({ ...localStorage }.cart);
+    const cart = JSON.parse({ ...localStorage
+    }.cart);
     for (var i = 0; i < cart.length; i++) {
       if (cart[i].id === foodObj.id) {
         cart[i].quantity = cart[i].quantity - 1;
@@ -168,7 +177,8 @@ const addToQuantity = (event, foodObj) => {
     url: urlQuantity,
     method: 'POST'
   }).done(function() {
-    const cart = JSON.parse({ ...localStorage }.cart);
+    const cart = JSON.parse({ ...localStorage
+    }.cart);
     for (var i = 0; i < cart.length; i++) {
       if (cart[i].id === foodObj.id) {
         cart[i].quantity = cart[i].quantity + 1;
@@ -233,7 +243,8 @@ const addItemToStorage = foodObj => {
     foodArray.push(foodObj);
     localStorage.setItem('cart', JSON.stringify(foodArray));
   } else {
-    const cart2 = JSON.parse({ ...localStorage }.cart);
+    const cart2 = JSON.parse({ ...localStorage
+    }.cart);
     for (var i = 0; i < cart2.length; i++) {
       if (cart2[i].name === foodObj.name) {
         cart2[i].quantity = cart2[i].quantity + 1;
@@ -269,17 +280,17 @@ const placeOrder = () => {
     const $id = generateRandomString();
 
     $.ajax({
-      method: 'POST',
-      url: urlOrder,
-      data: {
-        name: $name,
-        phone: $phone,
-        cartItems: $cartItems,
-        date: $date,
-        time: $time,
-        id: $id
-      }
-    })
+        method: 'POST',
+        url: urlOrder,
+        data: {
+          name: $name,
+          phone: $phone,
+          cartItems: $cartItems,
+          date: $date,
+          time: $time,
+          id: $id
+        }
+      })
       .done(response => {
         $('#cartitems').empty();
         $('#cart').text(
@@ -297,23 +308,33 @@ const placeOrder = () => {
 };
 
 //If cart empty, show a pizza!
-const displayEmptyCart = () => {
-  if (localStorage.length === 0) {
+const displayEmptyCart = (cleared) => {
+  if (localStorage.length === 0 || cleared.length === 0) {
     const $emptyCart = $('<i>').addClass("fas fa-pizza-slice");
     $('#cartitems').append($emptyCart);
   }
 };
 
+const deleteCart = () => {
+  $('#button2').on('click', function(event) {
+    localStorage.clear();
+    $('#cartitems').empty()
+    doTheMath([])
+    displayEmptyCart();
+  })
+}
+
 //On load call function and load localstorage cart if it exists
 $(function() {
-  displayEmptyCart();
   $(this).scrollTop(0);
+  displayEmptyCart();
+  deleteCart()
   addItemToCart();
   placeOrder();
   sendOrderReady();
   if (localStorage.cart) {
-  const cart = JSON.parse({ ...localStorage }.cart);
-  renderFoods(cart);
+    const cart = JSON.parse({ ...localStorage
+    }.cart);
+    renderFoods(cart);
   }
 });
-
