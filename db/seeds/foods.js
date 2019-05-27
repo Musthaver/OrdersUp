@@ -2,7 +2,7 @@
 exports.seed = function(knex, Promise) {
   return Promise.all([
      // Deletes ALL existing entries
-    knex.raw('ALTER SEQUENCE categories_id_seq RESTART WITH 1'),
+    knex.raw('ALTER SEQUENCE foods_id_seq RESTART WITH 1'),
     knex('foods')
     .del()
     .then(function () {
