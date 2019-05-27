@@ -43,7 +43,7 @@ exports.seed = function(knex, Promise) {
         name: 'Master Chief',
         phone: '15148881234',
         order: '1 Shrimp Salad',
-        time: '11:01',
+        time: '11:32',
         date: '14/5/2012'
       }]);
     });
