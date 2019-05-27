@@ -103,7 +103,7 @@ const deleteItem = (event, foodObj) => {
     doTheMath(cleared);
     $('#cartitems').empty();
     if(cleared.length === 0){
-      displayEmptyCart(cleared);
+      displayEmptyCart();
     }
     renderFoods(cleared);
   });
@@ -308,7 +308,10 @@ const placeOrder = () => {
 };
 
 //If cart empty, show a pizza!
-const displayEmptyCart = (cleared) => {
+const displayEmptyCart = () => {
+     const cart = JSON.parse({ ...localStorage
+    }.cart);
+    let cleared = cart.filter(obj => obj.name !== foodObj.name);
   if (localStorage.length === 0 || cleared.length === 0) {
     const $emptyCart = $('<i>').addClass("fas fa-pizza-slice");
     $('#cartitems').append($emptyCart);
