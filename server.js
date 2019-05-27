@@ -80,7 +80,8 @@ const displayOrderPage = res => {
   knex
     .select()
     .from('orders')
-    .orderBy('time')
+    .orderBy('date', 'DESC')
+    .orderBy('time', 'DESC')
     .then(results => {
       res.render('orders', {
         orders: results
