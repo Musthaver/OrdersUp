@@ -10,6 +10,9 @@ A web application built with Node.js, Express, Ajax, jQuery, HTML, Bootstrap & S
 
 ## Pictures
 
+!["Screenshot of the menu and cart"](docs/MenuAndCart.png)
+!["Pictures of the text messages received"](docs/TextMessages.png)
+!["Screenshot of the order management page for the restaurant"](docs/OrderConfirmationPage.png)
 
 
 ## Getting Started
