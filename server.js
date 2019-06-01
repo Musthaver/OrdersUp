@@ -165,7 +165,7 @@ const sendSMSToRestaurant = (name, order, time) => {
     .create({
       body: `Hello, ${name} sent a new order of ${order} at ${time}. Please respond with an ETA for the order to be ready`,
       from: '+14387963088',
-      to: '+15148059285'
+      to: '+1xxxxxxxxxx'
     })
     .then(message => console.log(message.sid));
 };

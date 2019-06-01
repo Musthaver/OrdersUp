@@ -16,6 +16,7 @@ A web application built with Node.js, Express, Ajax, jQuery, HTML, Bootstrap & S
 
 1. Install all the dependencies with npm install
 2. Set up the database by running knex migrate:latest and knex seed:run
+3. Visit http://localhost:8080/
 
 To use the Twilio features:
 
@@ -25,7 +26,9 @@ To use the Twilio features:
 4. Install ngrok
 5. Add your ngork adress
 6. Run npm start
-7. Visit http://localhost:8080/
+7. Put your Twilio phone number in the "from:" areas in server.js (lines 156, 167)
+8. Put a real phone number in the "to" area in server.js (line 168). This phone number will be the restaurant
+9. Enter a different real phone number when placing an order. 
 
 
 ## Dependencies
